@@ -32,13 +32,11 @@ import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
-import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.banner.FakeBannerPresenter
 import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiEvent
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.FakeToolCardPresenter
-import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
@@ -48,7 +46,6 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 class HomePresenterTest {
-    private val lessonsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
     private val toolsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
 
     private val context: Context = ApplicationProvider.getApplicationContext()
@@ -57,7 +54,6 @@ class HomePresenterTest {
         every { getLong(CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS) } returns 5
     }
     private val toolsRepository: ToolsRepository = mockk {
-        every { getLessonsFlow() } returns lessonsFlow
         every { getFavoriteToolsFlow() } returns toolsFlow
     }
     private val toolCardPresenter = FakeToolCardPresenter()
@@ -86,19 +82,7 @@ class HomePresenterTest {
 
     // region State.dataLoaded
     @Test
-    fun `State - dataLoaded - Dependent on spotlightLessons`() = runTest {
-        toolsFlow.emit(emptyList())
-        presenter.test {
-            assertFalse(expectMostRecentItem().dataLoaded)
-
-            lessonsFlow.emit(emptyList())
-            assertTrue(expectMostRecentItem().dataLoaded)
-        }
-    }
-
-    @Test
     fun `State - dataLoaded - Dependent on favoriteTools`() = runTest {
-        lessonsFlow.emit(emptyList())
         presenter.test {
             assertFalse(expectMostRecentItem().dataLoaded)
 
@@ -124,71 +108,6 @@ class HomePresenterTest {
         }
     }
     // endregion State.banner
-
-    // region State.spotlightLessons
-    @Test
-    fun `State - spotlightLessons`() = runTest {
-        lessonsFlow.emit(emptyList())
-
-        presenter.test {
-            assertEquals(emptyList(), expectMostRecentItem().spotlightLessons)
-
-            val lessons = List(3) { randomTool(type = Tool.Type.LESSON, isHidden = false, isSpotlight = true) }
-            lessonsFlow.emit(lessons)
-            assertEquals(lessons.map { it.code }, awaitItem().spotlightLessons.map { it.toolCode })
-
-            lessonsFlow.emit(emptyList())
-            assertEquals(emptyList(), awaitItem().spotlightLessons)
-        }
-    }
-
-    @Test
-    fun `State - spotlightLessons - Only Spotlight Lessons`() = runTest {
-        lessonsFlow.emit(
-            listOf(
-                randomTool(code = "valid", type = Tool.Type.LESSON, isHidden = false, isSpotlight = true),
-                randomTool(code = "invalid", type = Tool.Type.LESSON, isHidden = false, isSpotlight = false),
-            )
-        )
-
-        presenter.test {
-            assertEquals(listOf("valid"), expectMostRecentItem().spotlightLessons.map { it.toolCode })
-        }
-    }
-
-    @Test
-    fun `State - spotlightLessons - Exclude hidden Lessons`() = runTest {
-        lessonsFlow.emit(
-            listOf(
-                randomTool(code = "valid", type = Tool.Type.LESSON, isHidden = false, isSpotlight = true),
-                randomTool(code = "invalid", type = Tool.Type.LESSON, isHidden = true, isSpotlight = true),
-            )
-        )
-
-        presenter.test {
-            assertEquals(listOf("valid"), expectMostRecentItem().spotlightLessons.map { it.toolCode })
-        }
-    }
-
-    @Test
-    fun `State - spotlightLessons - Event - Click`() = runTest {
-        val lesson = randomTool(type = Tool.Type.LESSON, isHidden = false, isSpotlight = true)
-        val translation = randomTranslation(lesson.code, languageCode = Locale.FRENCH)
-        toolCardPresenter.buildUiState = { t, _, es ->
-            ToolCardPresenter.UiState(toolCode = t.code, translation = translation, eventSink = es)
-        }
-        lessonsFlow.emit(listOf(lesson))
-
-        presenter.test {
-            expectMostRecentItem().spotlightLessons[0].eventSink(ToolCardEvent.Click)
-
-            assertIs<IntentScreen>(navigator.awaitNextScreen()).let {
-                val expected = context.createToolIntent(lesson, listOf(translation.languageCode), resumeProgress = true)
-                assertTrue(expected equalsIntent it.intent)
-            }
-        }
-    }
-    // endregion State.spotlightLessons
 
     // region State.favoriteTools
     @Test

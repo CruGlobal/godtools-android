@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -12,9 +13,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -59,6 +60,9 @@ import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
+import org.cru.godtools.ui.dashboard.personalization.DashboardPersonalizationState
+import org.cru.godtools.ui.dashboard.personalization.LocalDashboardPersonalizationState
+import org.cru.godtools.ui.dashboard.personalization.PersonalizationToggle
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 
 @Composable
@@ -77,8 +81,8 @@ internal fun DashboardLayout(state: UiState, modifier: Modifier = Modifier) {
     DrawerMenuLayout(state.drawerState, modifier = modifier) {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = {},
+                CenterAlignedTopAppBar(
+                    title = { DashboardTitle(currentScreen, state.personalization) },
                     navigationIcon = {
                         when {
                             !backStack.isAtRoot -> IconButton(onClick = { navigator.pop() }) {
@@ -105,12 +109,35 @@ internal fun DashboardLayout(state: UiState, modifier: Modifier = Modifier) {
                 onRefresh = { state.eventSink(UiEvent.TriggerSync) },
                 modifier = Modifier.padding(it)
             ) {
-                NavigableCircuitContent(
-                    navigator = navigator,
-                    backStack = backStack,
-                )
+                CompositionLocalProvider(LocalDashboardPersonalizationState provides state.personalization) {
+                    NavigableCircuitContent(
+                        navigator = navigator,
+                        backStack = backStack,
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun DashboardTitle(screen: Screen, personalization: DashboardPersonalizationState) {
+    if (!personalization.isEnabled) return
+
+    when (screen) {
+        ToolsScreen -> PersonalizationToggle(
+            isPersonalized = personalization.toolsPersonalized,
+            personalizedLabel = R.string.dashboard_tools_toggle_personalized,
+            allLabel = R.string.dashboard_tools_toggle_all,
+            onSelect = { personalization.toolsPersonalized = it },
+        )
+
+        LessonsScreen -> PersonalizationToggle(
+            isPersonalized = personalization.lessonsPersonalized,
+            personalizedLabel = R.string.dashboard_lessons_toggle_personalized,
+            allLabel = R.string.dashboard_lessons_toggle_all,
+            onSelect = { personalization.lessonsPersonalized = it },
+        )
     }
 }
 

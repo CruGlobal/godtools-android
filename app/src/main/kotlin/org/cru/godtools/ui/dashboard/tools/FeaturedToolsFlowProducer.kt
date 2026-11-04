@@ -10,32 +10,21 @@ import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
-import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
 
 internal class FeaturedToolsFlowProducer @Inject constructor(
     private val settings: Settings,
     private val toolsRepository: ToolsRepository,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun getFlow(mode: Mode): Flow<List<Tool>> {
-        val baseFlow = when (mode) {
-            Mode.PERSONALIZATION -> {
-                settings.appLanguageFlow
-                    .combineTransformLatest(settings.getPersonalizationCountryFlow()) { lang, country ->
-                        when (country) {
-                            // the featured tools section is hidden when no country has been selected
-                            null -> emit(emptyList())
+    fun getFlow(): Flow<List<Tool>> = settings.appLanguageFlow
+        .combineTransformLatest(settings.getPersonalizationCountryFlow()) { lang, country ->
+            when (country) {
+                // the featured tools section is hidden when no country has been selected
+                null -> emit(emptyList())
 
-                            else -> emitAll(toolsRepository.getFeaturedToolsFlow(lang, country))
-                        }
-                    }
-                    .distinctUntilChanged()
+                else -> emitAll(toolsRepository.getFeaturedToolsFlow(lang, country))
             }
-
-            Mode.ALL_TOOLS -> toolsRepository.getNormalToolsFlow()
-                .map { it.filter { it.isSpotlight }.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER) }
         }
-
-        return baseFlow.map { it.filterNot { it.isHidden } }
-    }
+        .distinctUntilChanged()
+        .map { it.filterNot { it.isHidden } }
 }

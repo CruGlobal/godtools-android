@@ -36,7 +36,6 @@ import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiEvent
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiState
-import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.SquareToolCard
 
 private val PADDING_HORIZONTAL = 16.dp
@@ -67,34 +66,6 @@ internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
                     .padding(horizontal = PADDING_HORIZONTAL)
                     .padding(top = 16.dp)
             )
-        }
-
-        // featured lessons
-        if (state.spotlightLessons.isNotEmpty()) {
-            item("lesson-header", "lesson-header") {
-                FeaturedLessonsHeader(
-                    modifier = Modifier
-                        .animateItem()
-                        .padding(horizontal = PADDING_HORIZONTAL)
-                        .padding(top = 32.dp, bottom = 16.dp)
-                )
-            }
-
-            items(
-                state.spotlightLessons,
-                key = { it.toolCode.orEmpty() },
-                contentType = { "lesson-tool-card" }
-            ) { lessonState ->
-                LessonToolCard(
-                    lessonState,
-                    showLanguage = false,
-                    showProgress = true,
-                    modifier = Modifier
-                        .animateItem()
-                        .padding(horizontal = PADDING_HORIZONTAL)
-                        .padding(bottom = 16.dp)
-                )
-            }
         }
 
         // favorite tools
@@ -134,13 +105,6 @@ internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
 private fun WelcomeMessage(modifier: Modifier = Modifier) = Text(
     stringResource(R.string.dashboard_home_header_title),
     style = MaterialTheme.typography.headlineMedium,
-    modifier = modifier.fillMaxWidth()
-)
-
-@Composable
-private fun FeaturedLessonsHeader(modifier: Modifier = Modifier) = Text(
-    stringResource(R.string.dashboard_home_section_featured_lesson),
-    style = MaterialTheme.typography.titleLarge,
     modifier = modifier.fillMaxWidth()
 )
 

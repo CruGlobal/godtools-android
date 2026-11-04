@@ -43,7 +43,6 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favorit</string>
     <string name="dashboard_home_header_title">Selamat datang di GodTools</string>
-    <string name="dashboard_home_section_featured_lesson">Pelajaran-pelajaran</string>
     <string name="dashboard_home_section_favorites_title">Alat favorit Saudara</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Tidak ada alat favorit untuk ditampilkan</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Sentuh ikon untuk menjadikan alat favorit dan menyediakannya offline.</string>

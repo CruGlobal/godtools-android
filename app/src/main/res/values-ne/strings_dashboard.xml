@@ -45,7 +45,6 @@ https://knowgod.com/</string>
     <!-- Home -->
     <string name="nav_favorite_tools">मनपर्ने</string>
     <string name="dashboard_home_header_title">गड टूल्समा स्वागत छ</string>
-    <string name="dashboard_home_section_featured_lesson">विशेष पाठ</string>
     <string name="dashboard_home_section_favorites_title">तपाईको मनपर्ने सामग्रीहरु </string>
     <string name="dashboard_home_section_favorites_no_tools_title">प्रदर्शन गर्न मनपर्ने सामग्री छैन</string>
     <string name="dashboard_home_section_favorites_no_tools_description">कुनै सामग्री मनपर्ने र यसलाई अफलाइन उपलब्ध गराउन हृदय आइकनमा थिच्नुहोस् ।</string>

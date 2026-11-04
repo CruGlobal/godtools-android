@@ -4,12 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -28,7 +24,6 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_ALL_TOOLS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
-import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.model.Language
@@ -37,6 +32,7 @@ import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.banner.Banner
 import org.cru.godtools.ui.banner.BannerPresenter
 import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerPresenter
+import org.cru.godtools.ui.dashboard.personalization.LocalDashboardPersonalizationState
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
@@ -48,7 +44,6 @@ import org.greenrobot.eventbus.EventBus
 
 class ToolsPresenter @AssistedInject internal constructor(
     private val eventBus: EventBus,
-    private val remoteConfig: FirebaseRemoteConfig,
     private val settings: Settings,
     private val toolCardPresenter: ToolCardPresenter,
     private val favoriteToolsBannerPresenter: BannerPresenter<FavoriteToolsBannerPresenter.UiState>,
@@ -67,9 +62,6 @@ class ToolsPresenter @AssistedInject internal constructor(
         val spotlightTools: List<ToolCardPresenter.UiState> = emptyList(),
         val filters: Filters = Filters(),
         val tools: List<ToolCardPresenter.UiState> = emptyList(),
-        // TODO: temporary until personalization is rolled out to everyone,
-        //       then this can be removed and the mode logic simplified
-        val isPersonalizationEnabled: Boolean = false,
         val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState {
         enum class Mode { PERSONALIZATION, ALL_TOOLS }
@@ -83,12 +75,8 @@ class ToolsPresenter @AssistedInject internal constructor(
 
     @Composable
     override fun present(): UiState {
-        val isPersonalizationEnabled = rememberSaveable {
-            remoteConfig.getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED)
-        }
-        var mode by rememberSaveable {
-            mutableStateOf(if (isPersonalizationEnabled) Mode.PERSONALIZATION else Mode.ALL_TOOLS)
-        }
+        val personalization = LocalDashboardPersonalizationState.current
+        val mode = if (personalization.toolsPersonalized) Mode.PERSONALIZATION else Mode.ALL_TOOLS
         val filters = toolFiltersStateProducer.produce(mode)
         val selectedLocale by rememberUpdatedState(filters.languageFilter.selectedItem?.code)
 
@@ -97,7 +85,7 @@ class ToolsPresenter @AssistedInject internal constructor(
         RegisterFeaturedToolsSyncTask(appLocale)
 
         // featured tools always follow the app language, regardless of the selected language filter
-        val featuredTools = rememberFeaturedTools(mode) { openToolDetails(it, null, SOURCE_SPOTLIGHT) }
+        val featuredTools = rememberFeaturedTools { openToolDetails(it, null, SOURCE_SPOTLIGHT) }
 
         val tools = rememberTools(
             mode = mode,
@@ -109,16 +97,12 @@ class ToolsPresenter @AssistedInject internal constructor(
             mode = mode,
             banner = favoriteToolsBannerPresenter.present(),
             dataLoaded = featuredTools != null && tools != null,
-            spotlightTools = when {
-                isPersonalizationEnabled && mode == Mode.ALL_TOOLS -> emptyList()
-                else -> featuredTools.orEmpty()
-            },
+            spotlightTools = if (mode == Mode.PERSONALIZATION) featuredTools.orEmpty() else emptyList(),
             filters = filters,
             tools = tools.orEmpty(),
-            isPersonalizationEnabled = isPersonalizationEnabled,
         ) {
             when (it) {
-                is UiEvent.ChangeMode -> mode = it.mode
+                is UiEvent.ChangeMode -> personalization.toolsPersonalized = it.mode == Mode.PERSONALIZATION
                 is UiEvent.OpenLocalizationSettings -> navigator.goTo(CountrySettingsScreen)
             }
         }
@@ -135,11 +119,8 @@ class ToolsPresenter @AssistedInject internal constructor(
     }
 
     @Composable
-    private fun rememberFeaturedTools(
-        mode: Mode,
-        onOpenToolDetails: (String) -> Unit,
-    ): List<ToolCardPresenter.UiState>? {
-        val tools by remember(mode) { featuredToolsFlowProducer.getFlow(mode) }.collectAsState(null)
+    private fun rememberFeaturedTools(onOpenToolDetails: (String) -> Unit): List<ToolCardPresenter.UiState>? {
+        val tools by remember { featuredToolsFlowProducer.getFlow() }.collectAsState(null)
         return tools?.toToolCardState(null, onOpenToolDetails)
     }
 

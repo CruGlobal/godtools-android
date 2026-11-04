@@ -42,6 +42,8 @@ An online version can be found at https://knowgod.com/</string>
     <string name="dashboard_lessons_header_title_all">Lessons</string>
     <string name="dashboard_lessons_header_title_personalized">Lessons made for you</string>
     <string name="dashboard_lessons_header_description">Practical ideas to build relationships and start meaningful conversations.</string>
+    <string name="dashboard_lessons_section_featured_label">Featured</string>
+    <string name="dashboard_lessons_section_featured_description">Here are some lessons we thought you might like</string>
     <string name="dashboard_lessons_section_filter_label">Lessons in:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="one">%1$d Lesson available</item>
@@ -59,7 +61,6 @@ An online version can be found at https://knowgod.com/</string>
     <eat-comment />
     <string name="nav_favorite_tools">Favorites</string>
     <string name="dashboard_home_header_title">Welcome to GodTools</string>
-    <string name="dashboard_home_section_featured_lesson">Featured lesson</string>
     <string name="dashboard_home_section_favorites_title">Your favorite tools</string>
     <string name="dashboard_home_section_favorites_no_tools_title">No favorite tools to display</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Tap on the heart icon to favorite a tool and make it available offline.</string>
@@ -90,6 +91,9 @@ An online version can be found at https://knowgod.com/</string>
     <string name="dashboard_tools_section_spotlight_description">Here are some tools we thought you might like</string>
     <string name="dashboard_tools_section_personalized_localization_title">Displaying localized Tools list</string>
     <string name="dashboard_tools_section_personalized_localization_text">The tools shown in your Personalized Tools page are selected based on your Language and Localization setting. You can alter this by editing your setting.</string>
+    <string name="dashboard_tools_section_personalized_no_tools_title">Personalization unavailable</string>
+    <string name="dashboard_tools_section_personalized_no_tools_description">The tools shown on this page are based on your Language and Localization settings. Your current selection does not yet offer personalization.</string>
+    <string name="dashboard_tools_section_personalized_no_tools_action_all_tools">Go to All Tools</string>
     <string name="dashboard_section_localization_box_button">Change Localization Settings</string>
 
     <!-- Tool Cards -->

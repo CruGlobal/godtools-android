@@ -2,20 +2,22 @@ package org.cru.godtools.ui.dashboard.lessons
 
 import android.app.Application
 import android.content.Context
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.withCompositionLocal
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.Turbine
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.backstack.SaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.InternalCircuitApi
+import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
@@ -47,8 +49,8 @@ import org.ccci.gto.android.common.util.content.equalsIntent
 import org.ccci.gto.support.turbine.awaitItemMatching
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FEATURED
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_LESSONS
-import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.db.repository.LanguagesRepository
@@ -63,6 +65,8 @@ import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
+import org.cru.godtools.ui.dashboard.personalization.LocalDashboardPersonalizationState
+import org.cru.godtools.ui.dashboard.personalization.rememberDashboardPersonalizationState
 import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
@@ -79,6 +83,7 @@ class LessonsPresenterTest {
     private val countryFlow = MutableStateFlow<String?>("US")
     private val lessonsFlow = MutableStateFlow(emptyList<Tool>())
     private val enLessonsFlow = MutableStateFlow(emptyList<Tool>())
+    private val featuredLessonsFlow = MutableStateFlow(emptyList<Tool>())
     private val languagesFlow = MutableStateFlow(emptyList<Language>())
     private val translationsFlow = MutableStateFlow(emptyList<Translation>())
     private val toolOrderSync = Channel<Boolean>()
@@ -87,9 +92,6 @@ class LessonsPresenterTest {
     private val testScope = TestScope()
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
-    private val remoteConfig: FirebaseRemoteConfig = mockk {
-        every { getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED) } answers { isPersonalizationEnabled }
-    }
     private val languagesRepository: LanguagesRepository = mockk {
         every { findLanguageFlow(any()) } answers { flowOf(Language(firstArg())) }
         every { getLanguagesFlow() } returns languagesFlow
@@ -109,11 +111,13 @@ class LessonsPresenterTest {
     }
     private val syncService: GodToolsSyncService = mockk {
         coEvery { syncToolOrder(any(), any(), any()) } coAnswers { toolOrderSync.receive() }
+        coEvery { syncFeaturedTools(any(), any(), any()) } returns true
     }
     private val syncTaskRegistry = SyncTaskRegistry(SyncTracker(testScope.backgroundScope))
     private val lessonsFlowProducer: LessonsFlowProducer = mockk {
         every { getFlow(any(), any()) } returns flowOf(emptyList())
         every { getFlow(any(), Locale.ENGLISH) } returns enLessonsFlow
+        every { getFeaturedFlow() } returns featuredLessonsFlow
     }
     private val toolsRepository: ToolsRepository = mockk {
         every { getLessonsFlow() } returns lessonsFlow
@@ -127,12 +131,11 @@ class LessonsPresenterTest {
     private val circuitContext = CircuitContext(null).apply { putTag(syncTaskRegistry) }
     private val navigator = FakeNavigator(backStack)
 
-    private val presenter = LessonsPresenter(
+    private val lessonsPresenter = LessonsPresenter(
         context = context,
         eventBus = eventBus,
         languagesRepository = languagesRepository,
         lessonsFlowProducer = lessonsFlowProducer,
-        remoteConfig = remoteConfig,
         settings = settings,
         syncService = syncService,
         toolCardPresenter = FakeToolCardPresenter(),
@@ -142,6 +145,17 @@ class LessonsPresenterTest {
         circuitContext = circuitContext,
         navigator = navigator,
     )
+
+    // the page presenters read the personalization state that is normally provided by the dashboard
+    private val presenter = object : Presenter<UiState> {
+        @Composable
+        override fun present(): UiState {
+            val personalization = rememberDashboardPersonalizationState { isPersonalizationEnabled }
+            return withCompositionLocal(LocalDashboardPersonalizationState provides personalization) {
+                lessonsPresenter.present()
+            }
+        }
+    }
 
     // region StateRestorationTester Support
     @get:Rule
@@ -241,9 +255,12 @@ class LessonsPresenterTest {
                 assertEquals(Locale.ENGLISH, it.selectedItem?.code)
                 it.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
             }
-            assertEquals(Locale.FRENCH, expectMostRecentItem().languageFilter.selectedItem?.code)
+            val state = expectMostRecentItem()
+            assertEquals(Locale.FRENCH, state.languageFilter.selectedItem?.code)
 
+            // featured sections follow the app language, so this recomposes, but the resulting state is unchanged
             appLangFlow.value = Locale.GERMAN
+            assertEquals(state, awaitItem())
             expectNoEvents()
         }
     }
@@ -515,13 +532,56 @@ class LessonsPresenterTest {
     }
     // endregion State.lessons
 
+    // region State.featuredLessons
+    @Test
+    fun `State - featuredLessons`() = testScope.runTest {
+        featuredLessonsFlow.value = listOf(randomTool("featured1"), randomTool("featured2"))
+
+        presenter.test {
+            assertEquals(listOf("featured1", "featured2"), expectMostRecentItem().featuredLessons.map { it.toolCode })
+        }
+    }
+
+    @Test
+    fun `State - featuredLessons - empty when not in personalization mode`() = testScope.runTest {
+        isPersonalizationEnabled = false
+        featuredLessonsFlow.value = listOf(randomTool("featured"))
+
+        presenter.test {
+            val state = expectMostRecentItem()
+            assertEquals(UiState.Mode.ALL_LESSONS, state.mode)
+            assertEquals(emptyList(), state.featuredLessons)
+        }
+    }
+
+    @Test
+    fun `State - featuredLessons - Event - Click`() = testScope.runTest {
+        featuredLessonsFlow.value = listOf(randomTool("featured", type = Tool.Type.LESSON))
+
+        presenter.test {
+            expectMostRecentItem().featuredLessons[0].eventSink(ToolCardEvent.Click)
+
+            val expectedIntent = context.createToolIntent(
+                featuredLessonsFlow.value[0],
+                languages = listOf(Locale.ENGLISH),
+                resumeProgress = true
+            )
+            assertTrue(assertIs<IntentScreen>(navigator.awaitNextScreen()).intent equalsIntent expectedIntent)
+        }
+        verify { eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_LESSON, "featured", SOURCE_FEATURED)) }
+    }
+    // endregion State.featuredLessons
+
     // region SideEffect - RegisterSyncTask
     @Test
     fun `SideEffect - RegisterSyncTask - Triggers initial sync`() = testScope.runTest {
         presenter.test {
             awaitItemMatching { it.dataLoaded }
             toolOrderSync.send(true)
-            coVerifyAll { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
+            coVerifyAll {
+                syncService.syncToolOrder(Locale.ENGLISH, "US", false)
+                syncService.syncFeaturedTools(Locale.ENGLISH, "US", false)
+            }
         }
     }
 
@@ -531,7 +591,36 @@ class LessonsPresenterTest {
         presenter.test {
             awaitItemMatching { it.dataLoaded }
             toolOrderSync.send(true)
-            coVerifyAll { syncService.syncToolOrder(Locale.FRENCH, "US", false) }
+            coVerifyAll {
+                syncService.syncToolOrder(Locale.FRENCH, "US", false)
+                syncService.syncFeaturedTools(Locale.FRENCH, "US", false)
+            }
+        }
+    }
+
+    @Test
+    fun `SideEffect - RegisterSyncTask - featured lessons use app language`() = testScope.runTest {
+        presenter.test {
+            val initialState = awaitItem()
+            toolOrderSync.send(true)
+
+            initialState.languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
+            awaitItemMatching { it.languageFilter.selectedItem?.code == Locale.FRENCH }
+            toolOrderSync.send(true)
+
+            coVerify { syncService.syncFeaturedTools(Locale.ENGLISH, "US", false) }
+            coVerify(exactly = 0) { syncService.syncFeaturedTools(Locale.FRENCH, any(), any()) }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `SideEffect - RegisterSyncTask - no featured sync without a country`() = testScope.runTest {
+        countryFlow.value = null
+        presenter.test {
+            awaitItemMatching { it.dataLoaded }
+            toolOrderSync.send(true)
+            coVerify(exactly = 0) { syncService.syncFeaturedTools(any(), any(), any()) }
         }
     }
 
