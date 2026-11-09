@@ -16,6 +16,7 @@ import io.mockk.coVerify
 import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import java.util.Locale
 import kotlin.random.Random
 import kotlin.test.AfterTest
@@ -27,6 +28,7 @@ import kotlin.uuid.Uuid
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
@@ -35,6 +37,7 @@ import org.ccci.gto.android.common.sync.SyncTracker
 import org.ccci.gto.support.turbine.awaitItemMatching
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
@@ -60,6 +63,7 @@ class ToolsPresenterTest {
     private var isPersonalizationEnabled = false
     private val appLocaleFlow = MutableStateFlow(Locale.ENGLISH)
     private val countryFlow = MutableStateFlow<String?>("US")
+    private val personalizedFilterLocaleFlow = MutableStateFlow<Locale?>(null)
     private val featuredToolsFlow = MutableStateFlow(emptyList<Tool>())
     private val filteredToolsFlow = MutableStateFlow(emptyList<Tool>())
     private val toolOrderSync = Channel<Boolean>()
@@ -71,6 +75,10 @@ class ToolsPresenterTest {
     private val settings: Settings = mockk {
         every { appLanguageFlow } returns appLocaleFlow
         every { getCountrySettingFlow() } returns countryFlow
+        every { getDashboardPersonalizedFilterLocaleFlow() } returns personalizedFilterLocaleFlow
+    }
+    private val languagesRepository: LanguagesRepository = mockk {
+        every { findLanguageFlow(any()) } answers { flowOf(Language(firstArg())) }
     }
     private val syncService: GodToolsSyncService = mockk {
         coEvery { syncToolOrder(any(), any(), any()) } coAnswers { toolOrderSync.receive() }
@@ -78,7 +86,7 @@ class ToolsPresenterTest {
     }
     private val favoriteToolsBannerPresenter = FakeBannerPresenter<FavoriteToolsBannerPresenter.UiState>(null)
     private val featuredToolsFlowProducer: FeaturedToolsFlowProducer = mockk {
-        every { getFlow() } returns featuredToolsFlow
+        every { getFlow(any()) } returns featuredToolsFlow
     }
     private val filteredToolsFlowProducer: FilteredToolsFlowProducer = mockk {
         every { getFlow(any(), any(), any()) } returns filteredToolsFlow
@@ -90,6 +98,7 @@ class ToolsPresenterTest {
     private val toolsPresenter = ToolsPresenter(
         eventBus = mockk(),
         settings = settings,
+        languagesRepository = languagesRepository,
         toolCardPresenter = toolCardPresenter,
         favoriteToolsBannerPresenter = favoriteToolsBannerPresenter,
         featuredToolsFlowProducer = featuredToolsFlowProducer,
@@ -204,6 +213,62 @@ class ToolsPresenterTest {
     }
 
     @Test
+    fun `State - spotlightTools - uses the app language when no personalized filter language is stored`() =
+        testScope.runTest {
+            isPersonalizationEnabled = true
+            appLocaleFlow.value = Locale.GERMAN
+
+            presenter.test {
+                awaitInitialItem()
+                toolOrderSync.send(true)
+                verify { featuredToolsFlowProducer.getFlow(Locale.GERMAN) }
+                coVerify { syncService.syncFeaturedTools(Locale.GERMAN, any(), any()) }
+            }
+        }
+
+    @Test
+    fun `State - spotlightTools - uses the personalized filter language instead of the app language`() =
+        testScope.runTest {
+            isPersonalizationEnabled = true
+            appLocaleFlow.value = Locale.GERMAN
+            personalizedFilterLocaleFlow.value = Locale.FRENCH
+            val tool = randomTool(isHidden = false)
+            every { featuredToolsFlowProducer.getFlow(Locale.FRENCH) } returns MutableStateFlow(listOf(tool))
+
+            presenter.test {
+                assertEquals(listOf(tool), expectMostRecentItem().spotlightTools.map { it.tool })
+                toolOrderSync.send(true)
+                verify(exactly = 0) { featuredToolsFlowProducer.getFlow(Locale.GERMAN) }
+                coVerify { syncService.syncFeaturedTools(Locale.FRENCH, any(), any()) }
+            }
+        }
+
+    @Test
+    fun `State - spotlightTools - cards show the app language when no personalized filter language is stored`() =
+        testScope.runTest {
+            isPersonalizationEnabled = true
+            featuredToolsFlow.value = listOf(randomTool(isHidden = false))
+
+            presenter.test {
+                assertEquals(
+                    listOf(Locale.ENGLISH),
+                    expectMostRecentItem().spotlightTools.map { it.secondLanguage?.code },
+                )
+            }
+        }
+
+    @Test
+    fun `State - spotlightTools - cards show the personalized filter language`() = testScope.runTest {
+        isPersonalizationEnabled = true
+        personalizedFilterLocaleFlow.value = Locale.FRENCH
+        featuredToolsFlow.value = listOf(randomTool(isHidden = false))
+
+        presenter.test {
+            assertEquals(listOf(Locale.FRENCH), expectMostRecentItem().spotlightTools.map { it.secondLanguage?.code })
+        }
+    }
+
+    @Test
     fun `State - spotlightTools - Don't show featured tools for ALL_TOOLS`() = testScope.runTest {
         isPersonalizationEnabled = true
         val featuredTool = randomTool(isHidden = false)
@@ -303,7 +368,7 @@ class ToolsPresenterTest {
     }
 
     @Test
-    fun `SideEffect - RegisterSyncTask - tool order uses language filter, featured tools use app language`() =
+    fun `SideEffect - RegisterSyncTask - tool order uses language filter, featured tools ignore it`() =
         testScope.runTest {
             toolFiltersStateProducer.filters.value = ToolFiltersStateProducer.Filters(
                 languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.FRENCH))

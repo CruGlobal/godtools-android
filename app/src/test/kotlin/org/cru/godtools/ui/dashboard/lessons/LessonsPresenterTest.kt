@@ -117,7 +117,7 @@ class LessonsPresenterTest {
     private val lessonsFlowProducer: LessonsFlowProducer = mockk {
         every { getFlow(any(), any()) } returns flowOf(emptyList())
         every { getFlow(any(), Locale.ENGLISH) } returns enLessonsFlow
-        every { getFeaturedFlow() } returns featuredLessonsFlow
+        every { getFeaturedFlow(any()) } returns featuredLessonsFlow
     }
     private val toolsRepository: ToolsRepository = mockk {
         every { getLessonsFlow() } returns lessonsFlow
@@ -258,9 +258,7 @@ class LessonsPresenterTest {
             val state = expectMostRecentItem()
             assertEquals(Locale.FRENCH, state.languageFilter.selectedItem?.code)
 
-            // featured sections follow the app language, so this recomposes, but the resulting state is unchanged
             appLangFlow.value = Locale.GERMAN
-            assertEquals(state, awaitItem())
             expectNoEvents()
         }
     }
@@ -543,6 +541,49 @@ class LessonsPresenterTest {
     }
 
     @Test
+    fun `State - featuredLessons - uses the personalized language filter`() = testScope.runTest {
+        selectedPersonalizedLessonsLocale.value = Locale.FRENCH
+        every { lessonsFlowProducer.getFeaturedFlow(Locale.FRENCH) } returns flowOf(listOf(randomTool("featured-fr")))
+
+        presenter.test {
+            assertEquals(listOf("featured-fr"), expectMostRecentItem().featuredLessons.map { it.toolCode })
+            verify(exactly = 0) { lessonsFlowProducer.getFeaturedFlow(Locale.ENGLISH) }
+        }
+    }
+
+    @Test
+    fun `State - featuredLessons - cards show the app language when no personalized filter language is stored`() =
+        testScope.runTest {
+            featuredLessonsFlow.value = listOf(randomTool("featured"))
+
+            presenter.test {
+                assertEquals(
+                    listOf(Locale.ENGLISH),
+                    expectMostRecentItem().featuredLessons.map { it.secondLanguage?.code },
+                )
+            }
+        }
+
+    @Test
+    fun `State - featuredLessons - cards show the personalized filter language`() = testScope.runTest {
+        selectedPersonalizedLessonsLocale.value = Locale.FRENCH
+        every { lessonsFlowProducer.getFeaturedFlow(Locale.FRENCH) } returns flowOf(listOf(randomTool("featured-fr")))
+
+        presenter.test {
+            assertEquals(listOf(Locale.FRENCH), expectMostRecentItem().featuredLessons.map { it.secondLanguage?.code })
+        }
+    }
+
+    @Test
+    fun `State - lessons - cards have no second language`() = testScope.runTest {
+        enLessonsFlow.value = listOf(randomTool("lesson"))
+
+        presenter.test {
+            assertEquals(listOf(null), expectMostRecentItem().lessons.map { it.secondLanguage })
+        }
+    }
+
+    @Test
     fun `State - featuredLessons - empty when not in personalization mode`() = testScope.runTest {
         isPersonalizationEnabled = false
         featuredLessonsFlow.value = listOf(randomTool("featured"))
@@ -599,7 +640,7 @@ class LessonsPresenterTest {
     }
 
     @Test
-    fun `SideEffect - RegisterSyncTask - featured lessons use app language`() = testScope.runTest {
+    fun `SideEffect - RegisterSyncTask - featured lessons use the personalized language filter`() = testScope.runTest {
         presenter.test {
             val initialState = awaitItem()
             toolOrderSync.send(true)
@@ -608,11 +649,28 @@ class LessonsPresenterTest {
             awaitItemMatching { it.languageFilter.selectedItem?.code == Locale.FRENCH }
             toolOrderSync.send(true)
 
-            coVerify { syncService.syncFeaturedTools(Locale.ENGLISH, "US", false) }
-            coVerify(exactly = 0) { syncService.syncFeaturedTools(Locale.FRENCH, any(), any()) }
+            coVerify { syncService.syncFeaturedTools(Locale.FRENCH, "US", false) }
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    @Test
+    fun `SideEffect - RegisterSyncTask - featured lessons ignore the all-lessons language filter`() =
+        testScope.runTest {
+            isPersonalizationEnabled = false
+            presenter.test {
+                val initialState = awaitItem()
+                toolOrderSync.send(true)
+
+                initialState.languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
+                awaitItemMatching { it.languageFilter.selectedItem?.code == Locale.FRENCH }
+                toolOrderSync.send(true)
+
+                coVerify { syncService.syncFeaturedTools(Locale.ENGLISH, "US", false) }
+                coVerify(exactly = 0) { syncService.syncFeaturedTools(Locale.FRENCH, any(), any()) }
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
 
     @Test
     fun `SideEffect - RegisterSyncTask - no featured sync without a country`() = testScope.runTest {

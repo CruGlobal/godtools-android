@@ -136,7 +136,7 @@ private fun FeaturedLessons(lessons: List<ToolCardPresenter.UiState>, modifier: 
                 SquareToolCard(
                     state = toolState,
                     showCategory = false,
-                    // lessons have no parallel language, but this reserves the same row height as featured tools
+                    // shows the featured language availability, like featured tools
                     showSecondLanguage = true,
                     showActions = false,
                     showFavoriteAction = false,

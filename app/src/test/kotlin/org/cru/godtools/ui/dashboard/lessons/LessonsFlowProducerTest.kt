@@ -20,11 +20,9 @@ import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState.Mode
 
 @Suppress("UnusedFlow")
 class LessonsFlowProducerTest {
-    private val appLanguageFlow = MutableStateFlow(Locale.ENGLISH)
     private val countryFlow = MutableStateFlow<String?>(null)
 
     private val settings: Settings = mockk {
-        every { appLanguageFlow } returns this@LessonsFlowProducerTest.appLanguageFlow
         every { getPersonalizationCountryFlow() } returns countryFlow
     }
     private val toolsRepository: ToolsRepository = mockk {
@@ -134,16 +132,16 @@ class LessonsFlowProducerTest {
 
     // region getFeaturedFlow()
     @Test
-    fun `getFeaturedFlow - uses getFeaturedLessonsFlow with app language and country`() = runTest {
-        appLanguageFlow.value = Locale.FRENCH
+    fun `getFeaturedFlow - uses getFeaturedLessonsFlow with the provided locale and country`() = runTest {
         countryFlow.value = "US"
-        producer.getFeaturedFlow().first()
+        producer.getFeaturedFlow(Locale.FRENCH).first()
         verify { toolsRepository.getFeaturedLessonsFlow(Locale.FRENCH, "US") }
+        verify(exactly = 0) { toolsRepository.getFeaturedLessonsFlow(Locale.ENGLISH, any()) }
     }
 
     @Test
     fun `getFeaturedFlow - empty when no country is selected`() = runTest {
-        assertEquals(emptyList(), producer.getFeaturedFlow().first())
+        assertEquals(emptyList(), producer.getFeaturedFlow(Locale.ENGLISH).first())
         verify(exactly = 0) { toolsRepository.getFeaturedLessonsFlow(any(), any()) }
     }
 
@@ -154,7 +152,7 @@ class LessonsFlowProducerTest {
         countryFlow.value = "US"
         every { toolsRepository.getFeaturedLessonsFlow(any(), any()) } returns flowOf(listOf(hidden, visible))
 
-        assertEquals(listOf(visible), producer.getFeaturedFlow().first())
+        assertEquals(listOf(visible), producer.getFeaturedFlow(Locale.ENGLISH).first())
     }
 
     @Test
@@ -162,7 +160,7 @@ class LessonsFlowProducerTest {
         val usLesson = createLesson()
         every { toolsRepository.getFeaturedLessonsFlow(Locale.ENGLISH, "US") } returns flowOf(listOf(usLesson))
 
-        producer.getFeaturedFlow().test {
+        producer.getFeaturedFlow(Locale.ENGLISH).test {
             assertEquals(emptyList(), awaitItem())
 
             countryFlow.value = "US"

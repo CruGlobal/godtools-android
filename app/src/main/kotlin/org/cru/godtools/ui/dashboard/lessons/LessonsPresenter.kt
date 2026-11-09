@@ -32,6 +32,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
@@ -51,6 +52,7 @@ import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.db.repository.rememberLanguage
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.model.Tool
@@ -108,10 +110,14 @@ class LessonsPresenter @AssistedInject internal constructor(
 
         RegisterSyncTask(languageFilter.selectedItem?.code ?: appLanguage)
 
-        RegisterFeaturedLessonsSyncTask(appLanguage)
-
-        // featured lessons always follow the app language, regardless of the selected language filter
-        val featuredLessons = rememberFeaturedLessons(appLanguage)
+        // featured lessons follow the personalized language filter, independent of the current mode's filter
+        val featuredLocale by remember {
+            settings.getDashboardPersonalizedLessonsFilterLocaleFlow()
+                .combine(settings.appLanguageFlow) { stored, appLanguage -> stored ?: appLanguage }
+        }.collectAsState(null)
+        // wait for the stored filter to load so we don't briefly sync/load the app language instead
+        featuredLocale?.let { RegisterFeaturedLessonsSyncTask(it) }
+        val featuredLessons = rememberFeaturedLessons(featuredLocale)
         val lessons = rememberLessons(mode, languageFilter.selectedItem?.code ?: appLanguage)
 
         return UiState(
@@ -200,9 +206,11 @@ class LessonsPresenter @AssistedInject internal constructor(
     }
 
     @Composable
-    private fun rememberFeaturedLessons(locale: Locale): List<ToolCardPresenter.UiState>? {
-        val lessons by remember { lessonsFlowProducer.getFeaturedFlow() }.collectAsState(null)
-        return lessons?.toLessonCardStates(locale, SOURCE_FEATURED)
+    private fun rememberFeaturedLessons(locale: Locale?): List<ToolCardPresenter.UiState>? {
+        val lessons by remember(locale) { locale?.let { lessonsFlowProducer.getFeaturedFlow(it) } ?: emptyFlow() }
+            .collectAsState(null)
+        val language = languagesRepository.rememberLanguage(locale)
+        return locale?.let { lessons?.toLessonCardStates(it, SOURCE_FEATURED, secondLanguage = language) }
     }
 
     @Composable
@@ -213,34 +221,36 @@ class LessonsPresenter @AssistedInject internal constructor(
 
     @Composable
     @SuppressLint("FlowOperatorInvokedInComposition")
-    private fun List<Tool>.toLessonCardStates(locale: Locale, source: String) = map { tool ->
-        key(tool.code) {
-            lateinit var toolState: ToolCardPresenter.UiState
-            toolState = toolCardPresenter.present(
-                tool = tool,
-                customLocale = locale,
-                eventSink = {
-                    when (it) {
-                        ToolCardEvent.Click, ToolCardEvent.OpenTool -> {
-                            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_LESSON, tool.code, source))
-                            navigator.goTo(
-                                IntentScreen(
-                                    context.createToolIntent(
-                                        tool = tool,
-                                        languages = listOfNotNull(toolState.translation?.languageCode),
-                                        resumeProgress = true
-                                    ) ?: return@present
+    private fun List<Tool>.toLessonCardStates(locale: Locale, source: String, secondLanguage: Language? = null) =
+        map { tool ->
+            key(tool.code) {
+                lateinit var toolState: ToolCardPresenter.UiState
+                toolState = toolCardPresenter.present(
+                    tool = tool,
+                    customLocale = locale,
+                    secondLanguage = secondLanguage,
+                    eventSink = {
+                        when (it) {
+                            ToolCardEvent.Click, ToolCardEvent.OpenTool -> {
+                                eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_LESSON, tool.code, source))
+                                navigator.goTo(
+                                    IntentScreen(
+                                        context.createToolIntent(
+                                            tool = tool,
+                                            languages = listOfNotNull(toolState.translation?.languageCode),
+                                            resumeProgress = true
+                                        ) ?: return@present
+                                    )
                                 )
-                            )
-                        }
+                            }
 
-                        ToolCardEvent.OpenToolDetails -> Unit
+                            ToolCardEvent.OpenToolDetails -> Unit
+                        }
                     }
-                }
-            )
-            toolState
+                )
+                toolState
+            }
         }
-    }
 
     @Composable
     private fun RegisterSyncTask(locale: Locale) {

@@ -17,6 +17,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import org.ccci.gto.android.common.sync.SyncTracker
 import org.ccci.gto.android.common.sync.rememberSyncTask
@@ -26,6 +28,8 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURC
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
+import org.cru.godtools.db.repository.LanguagesRepository
+import org.cru.godtools.db.repository.rememberLanguage
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
@@ -45,6 +49,7 @@ import org.greenrobot.eventbus.EventBus
 class ToolsPresenter @AssistedInject internal constructor(
     private val eventBus: EventBus,
     private val settings: Settings,
+    private val languagesRepository: LanguagesRepository,
     private val toolCardPresenter: ToolCardPresenter,
     private val favoriteToolsBannerPresenter: BannerPresenter<FavoriteToolsBannerPresenter.UiState>,
     private val featuredToolsFlowProducer: FeaturedToolsFlowProducer,
@@ -82,10 +87,17 @@ class ToolsPresenter @AssistedInject internal constructor(
 
         val appLocale by settings.appLanguageFlow.collectAsState()
         RegisterToolOrderSyncTask(selectedLocale ?: appLocale)
-        RegisterFeaturedToolsSyncTask(appLocale)
 
-        // featured tools always follow the app language, regardless of the selected language filter
-        val featuredTools = rememberFeaturedTools { openToolDetails(it, null, SOURCE_SPOTLIGHT) }
+        // featured tools follow the personalized language filter, independent of the current mode's filter
+        val featuredLocale by remember {
+            settings.getDashboardPersonalizedFilterLocaleFlow()
+                .combine(settings.appLanguageFlow) { stored, appLanguage -> stored ?: appLanguage }
+        }.collectAsState(null)
+        // wait for the stored filter to load so we don't briefly sync/load the app language instead
+        featuredLocale?.let { RegisterFeaturedToolsSyncTask(it) }
+        val featuredTools = rememberFeaturedTools(featuredLocale) {
+            openToolDetails(it, featuredLocale, SOURCE_SPOTLIGHT)
+        }
 
         val tools = rememberTools(
             mode = mode,
@@ -119,9 +131,14 @@ class ToolsPresenter @AssistedInject internal constructor(
     }
 
     @Composable
-    private fun rememberFeaturedTools(onOpenToolDetails: (String) -> Unit): List<ToolCardPresenter.UiState>? {
-        val tools by remember { featuredToolsFlowProducer.getFlow() }.collectAsState(null)
-        return tools?.toToolCardState(null, onOpenToolDetails)
+    private fun rememberFeaturedTools(
+        locale: Locale?,
+        onOpenToolDetails: (String) -> Unit,
+    ): List<ToolCardPresenter.UiState>? {
+        val tools by remember(locale) { locale?.let { featuredToolsFlowProducer.getFlow(it) } ?: emptyFlow() }
+            .collectAsState(null)
+        val language = languagesRepository.rememberLanguage(locale)
+        return tools?.toToolCardState(language, onOpenToolDetails)
     }
 
     @Composable

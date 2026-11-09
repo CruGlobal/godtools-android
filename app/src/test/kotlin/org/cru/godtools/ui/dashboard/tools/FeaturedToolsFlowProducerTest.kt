@@ -17,11 +17,9 @@ import org.cru.godtools.model.randomTool
 
 @Suppress("UnusedFlow")
 class FeaturedToolsFlowProducerTest {
-    private val appLanguageFlow = MutableStateFlow(Locale.ENGLISH)
     private val countryFlow = MutableStateFlow<String?>("US")
 
     private val settings: Settings = mockk {
-        every { appLanguageFlow } returns this@FeaturedToolsFlowProducerTest.appLanguageFlow
         every { getPersonalizationCountryFlow() } returns countryFlow
     }
     private val toolsRepository: ToolsRepository = mockk {
@@ -32,20 +30,20 @@ class FeaturedToolsFlowProducerTest {
 
     @Test
     fun `getFlow - uses getFeaturedToolsFlow`() = runTest {
-        producer.getFlow().first()
+        producer.getFlow(Locale.ENGLISH).first()
         verify { toolsRepository.getFeaturedToolsFlow(any(), any()) }
     }
 
     @Test
-    fun `getFlow - uses appLanguageFlow`() = runTest {
-        appLanguageFlow.value = Locale.FRENCH
-        producer.getFlow().first()
+    fun `getFlow - uses the provided locale`() = runTest {
+        producer.getFlow(Locale.FRENCH).first()
         verify { toolsRepository.getFeaturedToolsFlow(Locale.FRENCH, any()) }
+        verify(exactly = 0) { toolsRepository.getFeaturedToolsFlow(Locale.ENGLISH, any()) }
     }
 
     @Test
     fun `getFlow - uses Settings getPersonalizationCountryFlow for country`() = runTest {
-        producer.getFlow().first()
+        producer.getFlow(Locale.ENGLISH).first()
         verify { toolsRepository.getFeaturedToolsFlow(any(), "US") }
     }
 
@@ -54,14 +52,14 @@ class FeaturedToolsFlowProducerTest {
         val tool = createTool()
         every { toolsRepository.getFeaturedToolsFlow(Locale.ENGLISH, "US") } returns flowOf(listOf(tool))
 
-        assertEquals(listOf(tool), producer.getFlow().first())
+        assertEquals(listOf(tool), producer.getFlow(Locale.ENGLISH).first())
     }
 
     @Test
     fun `getFlow - GT-3101 - no featured tools when no country is selected`() = runTest {
         countryFlow.value = null
 
-        assertEquals(emptyList(), producer.getFlow().first())
+        assertEquals(emptyList(), producer.getFlow(Locale.ENGLISH).first())
         verify(exactly = 0) { toolsRepository.getFeaturedToolsFlow(any(), any()) }
     }
 
@@ -69,7 +67,7 @@ class FeaturedToolsFlowProducerTest {
     fun `getFlow - GT-3101 - no featured tools when none exist for the selected country`() = runTest {
         every { toolsRepository.getFeaturedToolsFlow(Locale.ENGLISH, "US") } returns flowOf(emptyList())
 
-        assertEquals(emptyList(), producer.getFlow().first())
+        assertEquals(emptyList(), producer.getFlow(Locale.ENGLISH).first())
         verify(exactly = 0) { toolsRepository.getFeaturedToolsFlow(Locale.ENGLISH, null) }
     }
 
@@ -79,20 +77,7 @@ class FeaturedToolsFlowProducerTest {
         val visible = createTool(isHidden = false)
         every { toolsRepository.getFeaturedToolsFlow(any(), any()) } returns flowOf(listOf(hidden, visible))
 
-        assertEquals(listOf(visible), producer.getFlow().first())
-    }
-
-    @Test
-    fun `getFlow - updates when appLanguage changes`() = runTest {
-        val frenchTool = createTool()
-        every { toolsRepository.getFeaturedToolsFlow(Locale.FRENCH, "US") } returns flowOf(listOf(frenchTool))
-
-        producer.getFlow().test {
-            assertEquals(emptyList(), awaitItem())
-
-            appLanguageFlow.value = Locale.FRENCH
-            assertEquals(listOf(frenchTool), awaitItem())
-        }
+        assertEquals(listOf(visible), producer.getFlow(Locale.ENGLISH).first())
     }
 
     @Test
@@ -101,7 +86,7 @@ class FeaturedToolsFlowProducerTest {
         countryFlow.value = null
         every { toolsRepository.getFeaturedToolsFlow(Locale.ENGLISH, "US") } returns flowOf(listOf(usTool))
 
-        producer.getFlow().test {
+        producer.getFlow(Locale.ENGLISH).test {
             assertEquals(emptyList(), awaitItem())
 
             countryFlow.value = "US"

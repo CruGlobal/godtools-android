@@ -32,5 +32,5 @@ class FakeToolCardPresenter(
             is ToolCardEvent -> eventSink(it)
             else -> Unit
         }
-    }
+    }.copy(secondLanguage = secondLanguage)
 }
