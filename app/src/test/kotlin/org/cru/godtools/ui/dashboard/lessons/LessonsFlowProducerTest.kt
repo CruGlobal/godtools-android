@@ -95,6 +95,21 @@ class LessonsFlowProducerTest {
     }
 
     @Test
+    fun `getFlow - Personalization - falls back to language only when country-specific lessons are all hidden`() =
+        runTest {
+            val hidden = createLesson(isHidden = true)
+            val fallback = createLesson()
+            countryFlow.value = "US"
+            every { toolsRepository.getPersonalizedLessonsFlow(Locale.ENGLISH, "US") } returns flowOf(listOf(hidden))
+            every { toolsRepository.getPersonalizedLessonsFlow(Locale.ENGLISH, null) } returns flowOf(listOf(fallback))
+
+            assertEquals(
+                listOf(fallback),
+                producer.getFlow(mode = Mode.PERSONALIZATION, locale = Locale.ENGLISH).first(),
+            )
+        }
+
+    @Test
     fun `getFlow - Personalization - excludes hidden lessons`() = runTest {
         val hidden = createLesson(isHidden = true)
         val visible = createLesson(isHidden = false)

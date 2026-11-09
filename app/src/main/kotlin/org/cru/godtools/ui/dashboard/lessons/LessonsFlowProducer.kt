@@ -24,7 +24,11 @@ internal class LessonsFlowProducer @Inject constructor(
         val baseFlow = when (mode) {
             Mode.PERSONALIZATION -> settings.getPersonalizationCountryFlow()
                 .flatMapLatest { toolsRepository.getPersonalizedLessonsFlow(locale, it) }
-                .combine(toolsRepository.getPersonalizedLessonsFlow(locale, null)) { lessons, fallback ->
+                // hidden lessons are filtered before the fallback so they don't count as a populated list
+                .map { it.filterNot { it.isHidden } }
+                .combine(
+                    toolsRepository.getPersonalizedLessonsFlow(locale, null).map { it.filterNot { it.isHidden } }
+                ) { lessons, fallback ->
                     lessons.ifEmpty { fallback }
                 }
                 .distinctUntilChanged()
