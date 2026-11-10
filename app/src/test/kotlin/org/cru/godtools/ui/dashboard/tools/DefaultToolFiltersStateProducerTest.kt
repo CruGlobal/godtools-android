@@ -109,6 +109,7 @@ class DefaultToolFiltersStateProducerTest {
         presenterTestOf(presentFunction = { producer.produce(mode) }) {
             assertEquals(
                 listOf(
+                    FilterMenu.UiState.Item<String?>(null, 3),
                     FilterMenu.UiState.Item<String?>(Tool.CATEGORY_ARTICLES, 2),
                     FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 1)
                 ),
@@ -118,7 +119,7 @@ class DefaultToolFiltersStateProducerTest {
     }
 
     @Test
-    fun `Filters - categoryFilter - items - excludes tools without a category`() = testScope.runTest {
+    fun `Filters - categoryFilter - items - tools without category only in any category`() = testScope.runTest {
         filteredToolsFlow.value = listOf(
             randomTool(category = null),
             randomTool(category = Tool.CATEGORY_GOSPEL),
@@ -127,7 +128,10 @@ class DefaultToolFiltersStateProducerTest {
 
         presenterTestOf(presentFunction = { producer.produce(mode) }) {
             assertEquals(
-                listOf(FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 1)),
+                listOf(
+                    FilterMenu.UiState.Item<String?>(null, 3),
+                    FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 1),
+                ),
                 expectMostRecentItem().categoryFilter.items
             )
         }
@@ -231,7 +235,7 @@ class DefaultToolFiltersStateProducerTest {
 
             assertEquals(
                 listOf(
-                    FilterMenu.UiState.Item(null, 0),
+                    FilterMenu.UiState.Item(null, 2),
                     FilterMenu.UiState.Item(Language(Locale.ENGLISH), 2),
                     FilterMenu.UiState.Item(Language(Locale.FRENCH), 1)
                 ),
