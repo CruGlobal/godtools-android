@@ -97,12 +97,6 @@ class OnboardingPresenterTest {
             assertEquals(AppLanguageScreen, navigator.awaitNextScreen())
         }
     }
-
-    @Test
-    fun `UiEvent - Next - language already set - navigates to CountrySettingsScreen`() = runTest {
-        // TODO: Testing the full answering navigator callback chain requires integration testing.
-        //  The FakeNavigator doesn't trigger rememberAnsweringNavigator callbacks in unit tests.
-    }
     // endregion UiEvent.Next
 
     // region UiEvent.Finish
