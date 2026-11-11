@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
@@ -37,6 +39,9 @@ internal fun FavoriteAction(state: UiState, modifier: Modifier = Modifier, confi
 
     var showRemovalConfirmation by rememberSaveable { mutableStateOf(false) }
 
+    val actionLabel = stringResource(
+        if (isFavorite) R.string.action_tools_remove_favorite else R.string.action_tools_add_favorite
+    )
     Surface(
         onClick = {
             when {
@@ -47,7 +52,9 @@ internal fun FavoriteAction(state: UiState, modifier: Modifier = Modifier, confi
         },
         shape = CircleShape,
         shadowElevation = 6.dp,
-        modifier = modifier.testTag(TEST_TAG_FAVORITE_ACTION)
+        modifier = modifier
+            .testTag(TEST_TAG_FAVORITE_ACTION)
+            .semantics { contentDescription = actionLabel }
     ) {
         Icon(
             painter = painterResource(
