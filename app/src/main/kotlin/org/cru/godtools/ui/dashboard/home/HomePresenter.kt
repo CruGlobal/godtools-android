@@ -2,10 +2,14 @@ package org.cru.godtools.ui.dashboard.home
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
@@ -17,16 +21,18 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FAVORITE
-import org.cru.godtools.base.CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS
-import org.cru.godtools.base.ui.circuit.screen.dashboard.page.AllFavoritesScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.Banner
 import org.cru.godtools.ui.banner.BannerPresenter
 import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
@@ -41,7 +47,6 @@ class HomePresenter @AssistedInject constructor(
     @param:ApplicationContext
     private val context: Context,
     private val eventBus: EventBus,
-    private val remoteConfig: FirebaseRemoteConfig,
     private val toolCardPresenter: ToolCardPresenter,
     private val toolsRepository: ToolsRepository,
     private val tutorialFeaturesBannerPresenter: BannerPresenter<TutorialFeaturesBannerPresenter.UiState>,
@@ -56,74 +61,82 @@ class HomePresenter @AssistedInject constructor(
     ) : CircuitUiState
 
     sealed interface UiEvent : CircuitUiEvent {
-        data object ViewAllFavorites : UiEvent
+        data class MoveTool(val from: Int, val to: Int) : UiEvent
+        data object CommitToolOrder : UiEvent
         data object ViewAllTools : UiEvent
     }
     // endregion UiState / UiEvent
 
     @Composable
     override fun present(): UiState {
-        val favoriteTools = rememberFavoriteTools()
+        val scope = rememberCoroutineScope()
+        var favoriteTools by rememberFavoriteTools()
 
         return UiState(
             dataLoaded = favoriteTools != null,
             banner = tutorialFeaturesBannerPresenter.present(),
-            favoriteTools = favoriteTools.orEmpty(),
+            favoriteTools = favoriteTools.orEmpty().toToolCardStates(),
         ) {
             when (it) {
-                UiEvent.ViewAllFavorites -> navigator.goTo(AllFavoritesScreen)
+                is UiEvent.MoveTool ->
+                    favoriteTools = favoriteTools.orEmpty().toMutableList().apply { add(it.to, removeAt(it.from)) }
+
+                UiEvent.CommitToolOrder -> scope.launch(start = CoroutineStart.UNDISPATCHED) {
+                    withContext(NonCancellable) {
+                        toolsRepository.storeToolOrder(favoriteTools.orEmpty().mapNotNull { tool -> tool.code })
+                    }
+                }
+
                 UiEvent.ViewAllTools -> navigator.resetRoot(ToolsScreen, Navigator.StateOptions.SaveAndRestore)
             }
         }
     }
 
     @Composable
-    private fun rememberFavoriteTools() = remember {
-        toolsRepository.getFavoriteToolsFlow()
-            .map {
-                it.take(
-                    remoteConfig.getLong(CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS)
-                        .coerceIn(0, Int.MAX_VALUE.toLong()).toInt()
-                )
-            }
-    }.collectAsState(null).value
-        ?.mapNotNull { tool ->
-            val toolCode = tool.code ?: return@mapNotNull null
+    private fun rememberFavoriteTools(): MutableState<List<Tool>?> {
+        val state = remember { mutableStateOf<List<Tool>?>(null) }
+        LaunchedEffect(Unit) { toolsRepository.getFavoriteToolsFlow().collect { state.value = it } }
+        return state
+    }
 
-            key(toolCode) {
-                lateinit var state: ToolCardPresenter.UiState
-                state = toolCardPresenter.present(tool) {
-                    when (it) {
-                        ToolCardEvent.Click,
-                        ToolCardEvent.OpenTool -> {
-                            val intent = context.createToolIntent(
-                                tool = tool,
-                                languages = listOfNotNull(
-                                    tool.primaryLocale ?: state.translation?.languageCode,
-                                    tool.parallelLocale
-                                ),
-                                saveLanguageSettings = true
-                            )
+    @Composable
+    private fun List<Tool>.toToolCardStates() = mapNotNull { tool ->
+        val toolCode = tool.code ?: return@mapNotNull null
 
-                            if (intent != null) {
-                                eventBus.post(
-                                    OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, tool.code, SOURCE_FAVORITE)
-                                )
-                                navigator.goTo(IntentScreen(intent))
-                            }
-                        }
+        key(toolCode) {
+            lateinit var state: ToolCardPresenter.UiState
+            state = toolCardPresenter.present(tool) {
+                when (it) {
+                    ToolCardEvent.Click,
+                    ToolCardEvent.OpenTool -> {
+                        val intent = context.createToolIntent(
+                            tool = tool,
+                            languages = listOfNotNull(
+                                tool.primaryLocale ?: state.translation?.languageCode,
+                                tool.parallelLocale
+                            ),
+                            saveLanguageSettings = true
+                        )
 
-                        ToolCardEvent.OpenToolDetails -> {
+                        if (intent != null) {
                             eventBus.post(
-                                OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, toolCode, SOURCE_FAVORITE)
+                                OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, tool.code, SOURCE_FAVORITE)
                             )
-                            navigator.goTo(ToolDetailsScreen(toolCode))
+                            navigator.goTo(IntentScreen(intent))
                         }
                     }
+
+                    ToolCardEvent.OpenToolDetails -> {
+                        eventBus.post(
+                            OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, toolCode, SOURCE_FAVORITE)
+                        )
+                        navigator.goTo(ToolDetailsScreen(toolCode))
+                    }
                 }
-                state
             }
+            state
         }
+    }
 
     @AssistedFactory
     @CircuitInject(HomeScreen::class, SingletonComponent::class)

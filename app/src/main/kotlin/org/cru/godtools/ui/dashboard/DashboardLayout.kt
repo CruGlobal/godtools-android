@@ -51,7 +51,6 @@ import org.cru.godtools.analytics.firebase.model.ACTION_IAM_LESSONS
 import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.circuit.screen.dashboard.DashboardScreen
-import org.cru.godtools.base.ui.circuit.screen.dashboard.page.AllFavoritesScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.DashboardPage
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
@@ -187,7 +186,7 @@ private fun DashboardLayoutAnalytics(screen: Screen) {
             }
         }
 
-        is HomeScreen, is AllFavoritesScreen -> {
+        is HomeScreen -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_HOME))
             LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
                 eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME))
@@ -216,7 +215,7 @@ private fun DashboardBottomNavBar(currentScreen: Screen, onSelectPage: (Dashboar
         NavigationBarItem(
             icon = { Icon(painterResource(R.drawable.ic_favorite_24dp), stringResource(R.string.nav_favorite_tools)) },
             label = { Text(stringResource(R.string.nav_favorite_tools)) },
-            selected = currentScreen == HomeScreen || currentScreen == AllFavoritesScreen,
+            selected = currentScreen == HomeScreen,
             onClick = { onSelectPage(HomeScreen) },
         )
 

@@ -4,15 +4,17 @@ import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import java.util.Locale
-import kotlin.random.Random
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -25,8 +27,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.util.content.equalsIntent
-import org.cru.godtools.base.CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS
-import org.cru.godtools.base.ui.circuit.screen.dashboard.page.AllFavoritesScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.db.repository.ToolsRepository
@@ -50,11 +50,10 @@ class HomePresenterTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
-    private val remoteConfig: FirebaseRemoteConfig = mockk {
-        every { getLong(CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS) } returns 5
-    }
     private val toolsRepository: ToolsRepository = mockk {
         every { getFavoriteToolsFlow() } returns toolsFlow
+
+        coEvery { storeToolOrder(any()) } just Runs
     }
     private val toolCardPresenter = FakeToolCardPresenter()
     private val tutorialFeaturesBannerPresenter = FakeBannerPresenter<TutorialFeaturesBannerPresenter.UiState>()
@@ -64,7 +63,6 @@ class HomePresenterTest {
     private val presenter = HomePresenter(
         context = context,
         eventBus = eventBus,
-        remoteConfig = remoteConfig,
         toolCardPresenter = toolCardPresenter,
         toolsRepository = toolsRepository,
         tutorialFeaturesBannerPresenter = tutorialFeaturesBannerPresenter,
@@ -121,17 +119,12 @@ class HomePresenterTest {
     }
 
     @Test
-    fun `State - favoriteTools - limit to configured number of tools`() = runTest {
+    fun `State - favoriteTools - not limited to a maximum number of tools`() = runTest {
         val tools = List(10) { randomTool(type = Tool.Type.TRACT, isHidden = false) }
-        val limit = Random.nextLong(1, 10)
-        every { remoteConfig.getLong(CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS) } returns limit
 
         presenter.test {
             toolsFlow.emit(tools)
-            expectMostRecentItem().favoriteTools.let {
-                assertEquals(limit.toInt(), it.size)
-                assertEquals(tools.take(limit.toInt()).map { it.code }, it.map { it.toolCode })
-            }
+            assertEquals(tools.map { it.code }, expectMostRecentItem().favoriteTools.map { it.toolCode })
         }
     }
 
@@ -206,14 +199,35 @@ class HomePresenterTest {
     // endregion State.favoriteTools
 
     @Test
-    fun `Event - ViewAllFavorites`() = runTest {
+    fun `Event - MoveTool`() = runTest {
         presenter.test {
-            awaitItem().eventSink(UiEvent.ViewAllFavorites)
+            toolsFlow.emit(List(4) { randomTool("tool${it + 1}") })
 
-            assertEquals(AllFavoritesScreen, navigator.awaitNextScreen())
+            expectMostRecentItem().let { state ->
+                assertEquals(listOf("tool1", "tool2", "tool3", "tool4"), state.favoriteTools.map { it.toolCode })
+                state.eventSink(UiEvent.MoveTool(2, 1))
+            }
 
-            cancelAndIgnoreRemainingEvents()
+            assertEquals(
+                listOf("tool1", "tool3", "tool2", "tool4"),
+                expectMostRecentItem().favoriteTools.map { it.toolCode }
+            )
         }
+    }
+
+    @Test
+    fun `Event - CommitToolOrder`() = runTest {
+        presenter.test {
+            toolsFlow.emit(List(4) { randomTool("tool${it + 1}") })
+            expectMostRecentItem().eventSink(UiEvent.MoveTool(2, 1))
+
+            expectMostRecentItem().let { state ->
+                assertEquals(listOf("tool1", "tool3", "tool2", "tool4"), state.favoriteTools.map { it.toolCode })
+                state.eventSink(UiEvent.CommitToolOrder)
+            }
+        }
+
+        coVerify { toolsRepository.storeToolOrder(listOf("tool1", "tool3", "tool2", "tool4")) }
     }
 
     @Test

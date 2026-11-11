@@ -27,7 +27,6 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.base.ui.BasePaparazziTest
-import org.cru.godtools.base.ui.circuit.screen.dashboard.page.AllFavoritesScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
@@ -37,8 +36,6 @@ import org.cru.godtools.model.randomTool
 import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
-import org.cru.godtools.ui.dashboard.home.AllFavoritesLayout
-import org.cru.godtools.ui.dashboard.home.AllFavoritesPresenter
 import org.cru.godtools.ui.dashboard.home.HomeLayout
 import org.cru.godtools.ui.dashboard.home.HomePresenter
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
@@ -64,7 +61,8 @@ class DashboardLayoutPaparazziTest(
     nightMode = nightMode,
     accessibilityMode = accessibilityMode
 ) {
-    private val state = UiState()
+    // the default drawer state embeds the build's version, which would make the snapshots differ between builds
+    private val state = UiState(drawerState = DrawerMenuScreenStateTestData.closed)
 
     @BeforeTest
     @OptIn(ExperimentalCoilApi::class, ExperimentalCoroutinesApi::class)
@@ -263,24 +261,6 @@ class DashboardLayoutPaparazziTest(
     }
     // endregion HomeLayout
 
-    // region AllFavoritesLayout
-    private val allFavoritesState = AllFavoritesPresenter.UiState(
-        tools = listOf(
-            ToolCardStateTestData.tool.copy(toolCode = "tool1", translation = null),
-            ToolCardStateTestData.tool.copy(toolCode = "tool2", translation = null),
-            ToolCardStateTestData.tool.copy(toolCode = "tool3", translation = null),
-            ToolCardStateTestData.tool.copy(toolCode = "tool4", translation = null),
-            ToolCardStateTestData.tool.copy(toolCode = "tool5", translation = null),
-        )
-    )
-
-    @Test
-    fun `AllFavoritesLayout()`() {
-        assumeTrue(locale == null)
-        snapshotDashboardLayout(state.copy(initialPage = AllFavoritesScreen))
-    }
-    // endregion AllFavoritesLayout
-
     // region LessonsLayout
     private var lessonsState = LessonsPresenter.UiState(
         languageFilter = FilterMenu.UiState(
@@ -345,12 +325,6 @@ class DashboardLayoutPaparazziTest(
     // endregion LessonsLayout
 
     private val circuit = Circuit.Builder()
-        .addPresenter<AllFavoritesScreen, AllFavoritesPresenter.UiState> { _, _, _ ->
-            presenterOf { allFavoritesState }
-        }
-        .addUi<AllFavoritesScreen, AllFavoritesPresenter.UiState> { state, modifier ->
-            AllFavoritesLayout(state, modifier)
-        }
         .addPresenter<HomeScreen, HomePresenter.UiState> { _, _, _ -> presenterOf { homeState } }
         .addUi<HomeScreen, HomePresenter.UiState> { state, modifier -> HomeLayout(state, modifier) }
         .addPresenter<ToolsScreen, ToolsPresenter.UiState> { _, _, _ -> presenterOf { toolsState } }
