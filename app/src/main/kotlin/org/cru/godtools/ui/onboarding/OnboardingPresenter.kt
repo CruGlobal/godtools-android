@@ -94,9 +94,9 @@ class OnboardingPresenter @AssistedInject constructor(
             when (event) {
                 UiEvent.ChangeLanguage -> languageButtonNavigator.goTo(AppLanguageScreen)
 
-                // language selection always comes first, it leads into the country selection
                 UiEvent.Next -> when {
-                    !countryWasSet -> nextButtonNavigator.goTo(AppLanguageScreen)
+                    !languageWasSet -> nextButtonNavigator.goTo(AppLanguageScreen)
+                    !countryWasSet -> countrySettingsNavigator.goTo(CountrySettingsScreen)
                     else -> scope.launch { pagerState.navigateToPage() }
                 }
 
