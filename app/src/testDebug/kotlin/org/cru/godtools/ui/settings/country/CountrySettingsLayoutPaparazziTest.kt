@@ -72,4 +72,16 @@ class CountrySettingsLayoutPaparazziTest(
             }
         }
     }
+
+    @Test
+    fun `CountrySettingsLayout() - ConfirmationOverlay - No Country`() {
+        assumeFalse(accessibilityMode == AccessibilityMode.ACCESSIBILITY)
+        val overlay = CountrySettingsConfirmationOverlay(null)
+        snapshot {
+            CountrySettingsLayout(state)
+            OverlayEffect {
+                show(overlay)
+            }
+        }
+    }
 }
