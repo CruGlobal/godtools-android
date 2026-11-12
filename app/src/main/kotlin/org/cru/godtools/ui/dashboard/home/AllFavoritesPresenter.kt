@@ -9,6 +9,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -62,7 +63,8 @@ class AllFavoritesPresenter @AssistedInject constructor(
     @Composable
     override fun present(): UiState {
         val scope = rememberCoroutineScope()
-        var tools by rememberFavoriteTools()
+        val isReordering = remember { mutableStateOf(false) }
+        var tools by rememberFavoriteTools { isReordering.value }
 
         return UiState(
             tools = tools.mapNotNull { tool ->
@@ -103,21 +105,33 @@ class AllFavoritesPresenter @AssistedInject constructor(
             }
         ) {
             when (it) {
-                is UiEvent.MoveTool -> tools = tools.toMutableList().apply { add(it.to, removeAt(it.from)) }
+                is UiEvent.MoveTool -> {
+                    isReordering.value = true
+                    tools = tools.toMutableList().apply { add(it.to, removeAt(it.from)) }
+                }
 
                 UiEvent.CommitToolOrder -> scope.launch(start = CoroutineStart.UNDISPATCHED) {
+                    val order = tools
                     withContext(NonCancellable) {
-                        toolsRepository.storeToolOrder(tools.mapNotNull { it.code })
+                        toolsRepository.storeToolOrder(order.mapNotNull { it.code })
                     }
+                    // a new drag may have moved tools while the order was being stored
+                    if (tools === order) isReordering.value = false
                 }
             }
         }
     }
 
     @Composable
-    private fun rememberFavoriteTools(): MutableState<List<Tool>> {
+    private fun rememberFavoriteTools(isReordering: () -> Boolean): MutableState<List<Tool>> {
         val state = remember { mutableStateOf(emptyList<Tool>()) }
-        LaunchedEffect(Unit) { toolsRepository.getFavoriteToolsFlow().collect { state.value = it } }
+        val currentIsReordering by rememberUpdatedState(isReordering)
+        LaunchedEffect(Unit) {
+            toolsRepository.getFavoriteToolsFlow().collect {
+                // don't overwrite an in-progress reorder, storeToolOrder() will trigger a fresh emission once committed
+                if (!currentIsReordering()) state.value = it
+            }
+        }
         return state
     }
 
