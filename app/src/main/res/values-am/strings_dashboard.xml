@@ -44,7 +44,6 @@
     <!-- Home -->
     <string name="nav_favorite_tools">የኔ ምርጫ</string>
     <string name="dashboard_home_header_title">ወደ GodTools እንኳን በደህና መጡ</string>
-    <string name="dashboard_home_section_featured_lesson">ተለይቶ የቀረበ ትምህርት</string>
     <string name="dashboard_home_section_favorites_title">የእርስዎ ተመራጭ ቡክሌቶች</string>
     <string name="dashboard_home_section_favorites_no_tools_title">የተመረጡ ቡክሌቶች የሉም</string>
     <string name="dashboard_home_section_favorites_no_tools_description">ቡክሌቱን ወደ ምርጫዎ ለማስገባት እና ከኢንተርኔት ውጭ የሚገኝ ለማድረግ የልብ ምልክቱን ይንኩ።</string>

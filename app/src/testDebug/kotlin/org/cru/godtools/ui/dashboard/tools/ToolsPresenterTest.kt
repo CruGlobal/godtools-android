@@ -1,12 +1,14 @@
 package org.cru.godtools.ui.dashboard.tools
 
 import android.app.Application
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.withCompositionLocal
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.ReceiveTurbine
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.InternalCircuitApi
+import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import io.mockk.coEvery
@@ -14,6 +16,7 @@ import io.mockk.coVerify
 import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import java.util.Locale
 import kotlin.random.Random
 import kotlin.test.AfterTest
@@ -25,15 +28,16 @@ import kotlin.uuid.Uuid
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.sync.SyncTaskRegistry
 import org.ccci.gto.android.common.sync.SyncTracker
 import org.ccci.gto.support.turbine.awaitItemMatching
-import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
@@ -41,6 +45,8 @@ import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.banner.FakeBannerPresenter
 import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerPresenter
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
+import org.cru.godtools.ui.dashboard.personalization.LocalDashboardPersonalizationState
+import org.cru.godtools.ui.dashboard.personalization.rememberDashboardPersonalizationState
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
@@ -57,6 +63,7 @@ class ToolsPresenterTest {
     private var isPersonalizationEnabled = false
     private val appLocaleFlow = MutableStateFlow(Locale.ENGLISH)
     private val countryFlow = MutableStateFlow<String?>("US")
+    private val personalizedFilterLocaleFlow = MutableStateFlow<Locale?>(null)
     private val featuredToolsFlow = MutableStateFlow(emptyList<Tool>())
     private val filteredToolsFlow = MutableStateFlow(emptyList<Tool>())
     private val toolOrderSync = Channel<Boolean>()
@@ -68,6 +75,10 @@ class ToolsPresenterTest {
     private val settings: Settings = mockk {
         every { appLanguageFlow } returns appLocaleFlow
         every { getCountrySettingFlow() } returns countryFlow
+        every { getDashboardPersonalizedFilterLocaleFlow() } returns personalizedFilterLocaleFlow
+    }
+    private val languagesRepository: LanguagesRepository = mockk {
+        every { findLanguageFlow(any()) } answers { flowOf(Language(firstArg())) }
     }
     private val syncService: GodToolsSyncService = mockk {
         coEvery { syncToolOrder(any(), any(), any()) } coAnswers { toolOrderSync.receive() }
@@ -75,22 +86,19 @@ class ToolsPresenterTest {
     }
     private val favoriteToolsBannerPresenter = FakeBannerPresenter<FavoriteToolsBannerPresenter.UiState>(null)
     private val featuredToolsFlowProducer: FeaturedToolsFlowProducer = mockk {
-        every { getFlow(any(), any()) } returns featuredToolsFlow
+        every { getFlow(any()) } returns featuredToolsFlow
     }
     private val filteredToolsFlowProducer: FilteredToolsFlowProducer = mockk {
         every { getFlow(any(), any(), any()) } returns filteredToolsFlow
     }
     private val navigator = FakeNavigator(ToolsScreen)
-    private val remoteConfig: FirebaseRemoteConfig = mockk {
-        every { getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED) } answers { isPersonalizationEnabled }
-    }
     private val toolFiltersStateProducer = FakeToolFiltersStateProducer()
     private val toolCardPresenter = FakeToolCardPresenter()
 
-    private val presenter = ToolsPresenter(
+    private val toolsPresenter = ToolsPresenter(
         eventBus = mockk(),
-        remoteConfig = remoteConfig,
         settings = settings,
+        languagesRepository = languagesRepository,
         toolCardPresenter = toolCardPresenter,
         favoriteToolsBannerPresenter = favoriteToolsBannerPresenter,
         featuredToolsFlowProducer = featuredToolsFlowProducer,
@@ -100,6 +108,17 @@ class ToolsPresenterTest {
         circuitContext = circuitContext,
         navigator = navigator,
     )
+
+    // the page presenters read the personalization state that is normally provided by the dashboard
+    private val presenter = object : Presenter<UiState> {
+        @Composable
+        override fun present(): UiState {
+            val personalization = rememberDashboardPersonalizationState { isPersonalizationEnabled }
+            return withCompositionLocal(LocalDashboardPersonalizationState provides personalization) {
+                toolsPresenter.present()
+            }
+        }
+    }
 
     @AfterTest
     fun cleanup() = AndroidUiDispatcherUtil.runScheduledDispatches()
@@ -184,7 +203,8 @@ class ToolsPresenterTest {
     // region State.spotlightTools
     @Test
     fun `State - spotlightTools - shows tools from featuredToolsFlowProducer`() = testScope.runTest {
-        val tool = randomTool(isHidden = false, isSpotlight = true)
+        isPersonalizationEnabled = true
+        val tool = randomTool(isHidden = false)
 
         presenter.test {
             featuredToolsFlow.value = listOf(tool)
@@ -193,20 +213,85 @@ class ToolsPresenterTest {
     }
 
     @Test
-    fun `State - spotlightTools - Don't show spotlight tools for ALL_TOOLS when personalization enabled`() =
+    fun `State - spotlightTools - uses the app language when no personalized filter language is stored`() =
         testScope.runTest {
             isPersonalizationEnabled = true
-            val spotlightTool = randomTool(isHidden = false, isSpotlight = true)
-            featuredToolsFlow.value = listOf(spotlightTool)
+            appLocaleFlow.value = Locale.GERMAN
 
             presenter.test {
-                val initialState = awaitInitialItem()
-                assertEquals(listOf(spotlightTool), initialState.spotlightTools.map { it.tool })
-
-                initialState.eventSink(UiEvent.ChangeMode(Mode.ALL_TOOLS))
-                assertEquals(emptyList(), expectMostRecentItem().spotlightTools)
+                awaitInitialItem()
+                toolOrderSync.send(true)
+                verify { featuredToolsFlowProducer.getFlow(Locale.GERMAN) }
+                coVerify { syncService.syncFeaturedTools(Locale.GERMAN, any(), any()) }
             }
         }
+
+    @Test
+    fun `State - spotlightTools - uses the personalized filter language instead of the app language`() =
+        testScope.runTest {
+            isPersonalizationEnabled = true
+            appLocaleFlow.value = Locale.GERMAN
+            personalizedFilterLocaleFlow.value = Locale.FRENCH
+            val tool = randomTool(isHidden = false)
+            every { featuredToolsFlowProducer.getFlow(Locale.FRENCH) } returns MutableStateFlow(listOf(tool))
+
+            presenter.test {
+                assertEquals(listOf(tool), expectMostRecentItem().spotlightTools.map { it.tool })
+                toolOrderSync.send(true)
+                verify(exactly = 0) { featuredToolsFlowProducer.getFlow(Locale.GERMAN) }
+                coVerify { syncService.syncFeaturedTools(Locale.FRENCH, any(), any()) }
+            }
+        }
+
+    @Test
+    fun `State - spotlightTools - cards show the app language when no personalized filter language is stored`() =
+        testScope.runTest {
+            isPersonalizationEnabled = true
+            featuredToolsFlow.value = listOf(randomTool(isHidden = false))
+
+            presenter.test {
+                assertEquals(
+                    listOf(Locale.ENGLISH),
+                    expectMostRecentItem().spotlightTools.map { it.secondLanguage?.code },
+                )
+            }
+        }
+
+    @Test
+    fun `State - spotlightTools - cards show the personalized filter language`() = testScope.runTest {
+        isPersonalizationEnabled = true
+        personalizedFilterLocaleFlow.value = Locale.FRENCH
+        featuredToolsFlow.value = listOf(randomTool(isHidden = false))
+
+        presenter.test {
+            assertEquals(listOf(Locale.FRENCH), expectMostRecentItem().spotlightTools.map { it.secondLanguage?.code })
+        }
+    }
+
+    @Test
+    fun `State - spotlightTools - Don't show featured tools for ALL_TOOLS`() = testScope.runTest {
+        isPersonalizationEnabled = true
+        val featuredTool = randomTool(isHidden = false)
+        featuredToolsFlow.value = listOf(featuredTool)
+
+        presenter.test {
+            val initialState = awaitInitialItem()
+            assertEquals(listOf(featuredTool), initialState.spotlightTools.map { it.tool })
+
+            initialState.eventSink(UiEvent.ChangeMode(Mode.ALL_TOOLS))
+            assertEquals(emptyList(), expectMostRecentItem().spotlightTools)
+        }
+    }
+
+    @Test
+    fun `State - spotlightTools - Don't show featured tools when personalization is disabled`() = testScope.runTest {
+        isPersonalizationEnabled = false
+        featuredToolsFlow.value = listOf(randomTool(isHidden = false))
+
+        presenter.test {
+            assertEquals(emptyList(), awaitInitialItem().spotlightTools)
+        }
+    }
     // endregion State.spotlightTools
 
     // region State.filters
@@ -283,20 +368,21 @@ class ToolsPresenterTest {
     }
 
     @Test
-    fun `SideEffect - RegisterSyncTask - uses locale from language filter`() = testScope.runTest {
-        toolFiltersStateProducer.filters.value = ToolFiltersStateProducer.Filters(
-            languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.FRENCH))
-        )
+    fun `SideEffect - RegisterSyncTask - tool order uses language filter, featured tools ignore it`() =
+        testScope.runTest {
+            toolFiltersStateProducer.filters.value = ToolFiltersStateProducer.Filters(
+                languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.FRENCH))
+            )
 
-        presenter.test {
-            awaitInitialItem()
-            toolOrderSync.send(true)
-            coVerifyAll {
-                syncService.syncToolOrder(Locale.FRENCH, "US", false)
-                syncService.syncFeaturedTools(Locale.FRENCH, "US", false)
+            presenter.test {
+                awaitInitialItem()
+                toolOrderSync.send(true)
+                coVerifyAll {
+                    syncService.syncToolOrder(Locale.FRENCH, "US", false)
+                    syncService.syncFeaturedTools(Locale.ENGLISH, "US", false)
+                }
             }
         }
-    }
 
     @Test
     fun `SideEffect - RegisterSyncTask - re-syncs when locale changes`() = testScope.runTest {

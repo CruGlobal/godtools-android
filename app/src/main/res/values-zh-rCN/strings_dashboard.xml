@@ -43,7 +43,6 @@
     <!-- Home -->
     <string name="nav_favorite_tools">收藏夹</string>
     <string name="dashboard_home_header_title">欢迎来到Godtools信仰分享工具</string>
-    <string name="dashboard_home_section_featured_lesson">特色课程</string>
     <string name="dashboard_home_section_favorites_title">你最喜欢的工具</string>
     <string name="dashboard_home_section_favorites_no_tools_title">没有最喜欢的工具来显示</string>
     <string name="dashboard_home_section_favorites_no_tools_description">点击心形图标来收藏一个工具，并使其离线可用。</string>

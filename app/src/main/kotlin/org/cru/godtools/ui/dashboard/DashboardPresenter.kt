@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.foundation.NavEvent
 import com.slack.circuit.foundation.onNavEvent
@@ -22,16 +23,20 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.sync.SyncTracker
 import org.ccci.gto.android.common.sync.rememberSyncTask
 import org.ccci.gto.android.common.sync.rememberSyncTaskRegistry
+import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.ui.circuit.screen.dashboard.DashboardScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.DashboardPage
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
+import org.cru.godtools.ui.dashboard.personalization.DashboardPersonalizationState
+import org.cru.godtools.ui.dashboard.personalization.rememberDashboardPersonalizationState
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
 
 class DashboardPresenter @AssistedInject internal constructor(
     private val drawerMenuPresenter: DrawerMenuPresenter,
+    private val remoteConfig: FirebaseRemoteConfig,
     private val syncService: GodToolsSyncService,
     @Assisted private val circuitContext: CircuitContext,
     @Assisted private val navigator: Navigator,
@@ -43,6 +48,7 @@ class DashboardPresenter @AssistedInject internal constructor(
         val isSyncing: Boolean = false,
         val initialPage: DashboardPage = HomeScreen,
         val snackbarState: SnackbarHostState = SnackbarHostState(),
+        val personalization: DashboardPersonalizationState = DashboardPersonalizationState(),
         internal val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState
 
@@ -61,6 +67,9 @@ class DashboardPresenter @AssistedInject internal constructor(
             isSyncing = syncRegistry.syncTracker.isSyncing.collectAsState().value,
             initialPage = screen.initialPage,
             snackbarState = remember { SnackbarHostState() },
+            personalization = rememberDashboardPersonalizationState {
+                remoteConfig.getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED)
+            },
         ) {
             when (it) {
                 UiEvent.TriggerSync -> syncRegistry.triggerSyncTasks(force = true)

@@ -27,7 +27,6 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.base.ui.BasePaparazziTest
-import org.cru.godtools.base.ui.circuit.screen.dashboard.page.AllFavoritesScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
@@ -37,12 +36,11 @@ import org.cru.godtools.model.randomTool
 import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
-import org.cru.godtools.ui.dashboard.home.AllFavoritesLayout
-import org.cru.godtools.ui.dashboard.home.AllFavoritesPresenter
 import org.cru.godtools.ui.dashboard.home.HomeLayout
 import org.cru.godtools.ui.dashboard.home.HomePresenter
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter
+import org.cru.godtools.ui.dashboard.personalization.DashboardPersonalizationState
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.dashboard.tools.ToolsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter
@@ -63,7 +61,8 @@ class DashboardLayoutPaparazziTest(
     nightMode = nightMode,
     accessibilityMode = accessibilityMode
 ) {
-    private val state = UiState()
+    // the default drawer state embeds the build's version, which would make the snapshots differ between builds
+    private val state = UiState(drawerState = DrawerMenuScreenStateTestData.closed)
 
     @BeforeTest
     @OptIn(ExperimentalCoilApi::class, ExperimentalCoroutinesApi::class)
@@ -97,7 +96,6 @@ class DashboardLayoutPaparazziTest(
 
     // region ToolsLayout
     private var toolsState = ToolsPresenter.UiState(
-        isPersonalizationEnabled = true,
         dataLoaded = true,
         spotlightTools = listOf(
             ToolCardStateTestData.tool.copy(
@@ -205,7 +203,6 @@ class DashboardLayoutPaparazziTest(
             mode = ToolsPresenter.UiState.Mode.PERSONALIZATION,
             filters = Filters(languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.ENGLISH))),
             spotlightTools = emptyList(),
-            tools = emptyList(),
         )
         snapshotDashboardLayout(state.copy(initialPage = ToolsScreen))
     }
@@ -213,7 +210,7 @@ class DashboardLayoutPaparazziTest(
     @Test
     fun `ToolsLayout() - No Personalization`() {
         assumeTrue(locale == null)
-        toolsState = toolsState.copy(isPersonalizationEnabled = false)
+        isPersonalizationEnabled = false
         snapshotDashboardLayout(state.copy(initialPage = ToolsScreen))
     }
     // endregion ToolsLayout
@@ -221,9 +218,6 @@ class DashboardLayoutPaparazziTest(
     // region HomeLayout
     private var homeState = HomePresenter.UiState(
         dataLoaded = true,
-        spotlightLessons = listOf(
-            ToolCardStateTestData.tool.copy(toolCode = "lesson", translation = null)
-        ),
         favoriteTools = listOf(
             ToolCardStateTestData.tool.copy(toolCode = "tool1", translation = null),
             ToolCardStateTestData.tool.copy(toolCode = "tool2", translation = null),
@@ -260,13 +254,6 @@ class DashboardLayoutPaparazziTest(
     }
 
     @Test
-    fun `HomeLayout() - No Spotlight Lessons`() {
-        assumeTrue(locale == null)
-        homeState = homeState.copy(spotlightLessons = emptyList())
-        snapshotDashboardLayout(state.copy(initialPage = HomeScreen))
-    }
-
-    @Test
     fun `HomeLayout() - No Favorites`() {
         assumeTrue(locale == null)
         homeState = homeState.copy(favoriteTools = emptyList())
@@ -274,27 +261,8 @@ class DashboardLayoutPaparazziTest(
     }
     // endregion HomeLayout
 
-    // region AllFavoritesLayout
-    private val allFavoritesState = AllFavoritesPresenter.UiState(
-        tools = listOf(
-            ToolCardStateTestData.tool.copy(toolCode = "tool1", translation = null),
-            ToolCardStateTestData.tool.copy(toolCode = "tool2", translation = null),
-            ToolCardStateTestData.tool.copy(toolCode = "tool3", translation = null),
-            ToolCardStateTestData.tool.copy(toolCode = "tool4", translation = null),
-            ToolCardStateTestData.tool.copy(toolCode = "tool5", translation = null),
-        )
-    )
-
-    @Test
-    fun `AllFavoritesLayout()`() {
-        assumeTrue(locale == null)
-        snapshotDashboardLayout(state.copy(initialPage = AllFavoritesScreen))
-    }
-    // endregion AllFavoritesLayout
-
     // region LessonsLayout
     private var lessonsState = LessonsPresenter.UiState(
-        isPersonalizationEnabled = true,
         languageFilter = FilterMenu.UiState(
             selectedItem = Language(Locale.ENGLISH)
         ),
@@ -310,6 +278,16 @@ class DashboardLayoutPaparazziTest(
     @Test
     fun `LessonsLayout() - Personalization`() {
         lessonsState = lessonsState.copy(mode = LessonsPresenter.UiState.Mode.PERSONALIZATION)
+        snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
+    }
+
+    @Test
+    fun `LessonsLayout() - Personalization - Featured Lessons`() {
+        assumeTrue(locale == null)
+        lessonsState = lessonsState.copy(
+            mode = LessonsPresenter.UiState.Mode.PERSONALIZATION,
+            featuredLessons = lessonsState.lessons.take(3),
+        )
         snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
     }
 
@@ -341,18 +319,12 @@ class DashboardLayoutPaparazziTest(
 
     @Test
     fun `LessonsLayout() - Personalization Disabled`() {
-        lessonsState = lessonsState.copy(isPersonalizationEnabled = false)
+        isPersonalizationEnabled = false
         snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
     }
     // endregion LessonsLayout
 
     private val circuit = Circuit.Builder()
-        .addPresenter<AllFavoritesScreen, AllFavoritesPresenter.UiState> { _, _, _ ->
-            presenterOf { allFavoritesState }
-        }
-        .addUi<AllFavoritesScreen, AllFavoritesPresenter.UiState> { state, modifier ->
-            AllFavoritesLayout(state, modifier)
-        }
         .addPresenter<HomeScreen, HomePresenter.UiState> { _, _, _ -> presenterOf { homeState } }
         .addUi<HomeScreen, HomePresenter.UiState> { state, modifier -> HomeLayout(state, modifier) }
         .addPresenter<ToolsScreen, ToolsPresenter.UiState> { _, _, _ -> presenterOf { toolsState } }
@@ -360,6 +332,15 @@ class DashboardLayoutPaparazziTest(
         .addPresenter<LessonsScreen, LessonsPresenter.UiState> { _, _, _ -> presenterOf { lessonsState } }
         .addUi<LessonsScreen, LessonsPresenter.UiState> { state, modifier -> LessonsLayout(state, modifier) }
         .build()
+
+    private var isPersonalizationEnabled = true
+
+    // the app bar toggle reads the dashboard's personalization state, so derive it from the fake page states
+    private fun personalizationState() = DashboardPersonalizationState(
+        isEnabled = isPersonalizationEnabled,
+        toolsPersonalized = toolsState.mode == ToolsPresenter.UiState.Mode.PERSONALIZATION,
+        lessonsPersonalized = lessonsState.mode == LessonsPresenter.UiState.Mode.PERSONALIZATION,
+    )
 
     private fun snapshotDashboardLayout(state: UiState = this.state) = snapshot {
         CircuitCompositionLocals(circuit) {
@@ -369,7 +350,7 @@ class DashboardLayoutPaparazziTest(
                 // mock required for AppUpdateSnackbar
                 LocalAppUpdateManager provides mockk(relaxed = true)
             ) {
-                DashboardLayout(state)
+                DashboardLayout(state.copy(personalization = personalizationState()))
             }
         }
     }

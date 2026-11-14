@@ -44,7 +44,6 @@
     <!-- Home -->
     <string name="nav_favorite_tools">पसंदीदा</string>
     <string name="dashboard_home_header_title">GodTools पर स्वागत है</string>
-    <string name="dashboard_home_section_featured_lesson">फीचर किए गए अध्याय</string>
     <string name="dashboard_home_section_favorites_title">आपके पसंदीदा टूल</string>
     <string name="dashboard_home_section_favorites_no_tools_title">दिखाने के लिए कोई पसंदीदा टूल नहीं</string>
     <string name="dashboard_home_section_favorites_no_tools_description">किसी टूल को पसंदीदा बनाने के लिए दिल के चिन्ह पर टैप करें और उसे ऑफ़लाइन भी इस्तेमाल करें।</string>

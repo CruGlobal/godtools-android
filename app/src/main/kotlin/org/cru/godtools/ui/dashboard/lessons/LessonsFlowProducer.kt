@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
@@ -22,7 +23,11 @@ internal class LessonsFlowProducer @Inject constructor(
         val baseFlow = when (mode) {
             Mode.PERSONALIZATION -> settings.getPersonalizationCountryFlow()
                 .flatMapLatest { toolsRepository.getPersonalizedLessonsFlow(locale, it) }
-                .combine(toolsRepository.getPersonalizedLessonsFlow(locale, null)) { lessons, fallback ->
+                // hidden lessons are filtered before the fallback so they don't count as a populated list
+                .map { it.filterNot { it.isHidden } }
+                .combine(
+                    toolsRepository.getPersonalizedLessonsFlow(locale, null).map { it.filterNot { it.isHidden } }
+                ) { lessons, fallback ->
                     lessons.ifEmpty { fallback }
                 }
                 .distinctUntilChanged()
@@ -32,4 +37,17 @@ internal class LessonsFlowProducer @Inject constructor(
 
         return baseFlow.map { it.filterNot { it.isHidden } }
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun getFeaturedFlow(locale: Locale): Flow<List<Tool>> = settings.getPersonalizationCountryFlow()
+        .flatMapLatest { country ->
+            when (country) {
+                // the featured lessons section is hidden when no country has been selected
+                null -> flowOf(emptyList())
+
+                else -> toolsRepository.getFeaturedLessonsFlow(locale, country)
+            }
+        }
+        .distinctUntilChanged()
+        .map { it.filterNot { it.isHidden } }
 }

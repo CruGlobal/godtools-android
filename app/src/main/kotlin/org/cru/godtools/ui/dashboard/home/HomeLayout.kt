@@ -1,20 +1,15 @@
 package org.cru.godtools.ui.dashboard.home
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.DragInteraction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,24 +27,46 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
+import org.burnoutcrew.reorderable.ReorderableItem
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.rememberReorderableLazyListState
+import org.burnoutcrew.reorderable.reorderable
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiEvent
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiState
-import org.cru.godtools.ui.tools.LessonToolCard
-import org.cru.godtools.ui.tools.SquareToolCard
+import org.cru.godtools.ui.tools.ToolCard
 
 private val PADDING_HORIZONTAL = 16.dp
 
 @Composable
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
-    val columnState = rememberLazyListState()
+    val favoriteTools by rememberUpdatedState(state.favoriteTools)
+    val eventSink by rememberUpdatedState(state.eventSink)
+
+    val reorderableState = rememberReorderableLazyListState(
+        // only support reordering tool items
+        canDragOver = { (_, k), _ -> (k as? String)?.startsWith("tool:") == true },
+        onMove = { from, to ->
+            val fromPos = favoriteTools.indexOfFirst { it.toolCode == (from.key as? String)?.removePrefix("tool:") }
+            val toPos = favoriteTools.indexOfFirst { it.toolCode == (to.key as? String)?.removePrefix("tool:") }
+            if (fromPos != -1 && toPos != -1) eventSink(UiEvent.MoveTool(fromPos, toPos))
+        },
+        onDragEnd = { _, _ -> eventSink(UiEvent.CommitToolOrder) }
+    )
+    val columnState = reorderableState.listState
 
     LaunchedEffect(state.banner?.type) { if (state.banner != null) columnState.animateScrollToItem(0) }
 
-    LazyColumn(state = columnState, contentPadding = PaddingValues(bottom = 16.dp), modifier = modifier) {
+    LazyColumn(
+        state = columnState,
+        contentPadding = PaddingValues(bottom = 16.dp),
+        modifier = modifier
+            .reorderable(reorderableState)
+            .detectReorderAfterLongPress(reorderableState)
+    ) {
         if (!state.dataLoaded) return@LazyColumn
 
         item("banners", "banners") {
@@ -60,62 +78,36 @@ internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
             )
         }
 
-        item("welcome") {
-            WelcomeMessage(
-                modifier = Modifier
-                    .animateItem()
-                    .padding(horizontal = PADDING_HORIZONTAL)
-                    .padding(top = 16.dp)
-            )
-        }
-
-        // featured lessons
-        if (state.spotlightLessons.isNotEmpty()) {
-            item("lesson-header", "lesson-header") {
-                FeaturedLessonsHeader(
-                    modifier = Modifier
-                        .animateItem()
-                        .padding(horizontal = PADDING_HORIZONTAL)
-                        .padding(top = 32.dp, bottom = 16.dp)
-                )
-            }
-
-            items(
-                state.spotlightLessons,
-                key = { it.toolCode.orEmpty() },
-                contentType = { "lesson-tool-card" }
-            ) { lessonState ->
-                LessonToolCard(
-                    lessonState,
-                    showLanguage = false,
-                    showProgress = true,
-                    modifier = Modifier
-                        .animateItem()
-                        .padding(horizontal = PADDING_HORIZONTAL)
-                        .padding(bottom = 16.dp)
-                )
-            }
-        }
-
         // favorite tools
         item("favorites-header") {
             FavoritesHeader(
-                state = state,
                 modifier = Modifier
                     .animateItem()
                     .padding(horizontal = PADDING_HORIZONTAL)
-                    .padding(top = 32.dp, bottom = 16.dp),
+                    .padding(top = 16.dp, bottom = 16.dp),
             )
         }
 
         if (state.favoriteTools.isNotEmpty()) {
-            item("favorites", "favorites") {
-                HorizontalFavoriteTools(
-                    state,
-                    modifier = Modifier
-                        .animateItem()
-                        .fillMaxWidth()
-                )
+            items(state.favoriteTools, key = { "tool:${it.toolCode}" }) { toolState ->
+                ReorderableItem(
+                    state = reorderableState,
+                    key = "tool:${toolState.toolCode}",
+                    defaultDraggingModifier = Modifier.animateItem()
+                ) { isDragging ->
+                    val interactionSource = remember { MutableInteractionSource() }
+                    interactionSource.reorderableDragInteractions(isDragging)
+
+                    ToolCard(
+                        toolState,
+                        confirmRemovalFromFavorites = true,
+                        interactionSource = interactionSource,
+                        modifier = Modifier
+                            .padding(horizontal = PADDING_HORIZONTAL)
+                            .padding(bottom = 16.dp)
+                            .fillMaxWidth()
+                    )
+                }
             }
         } else {
             item("favorites-empty", "favorites-empty") {
@@ -131,59 +123,26 @@ internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun WelcomeMessage(modifier: Modifier = Modifier) = Text(
-    stringResource(R.string.dashboard_home_header_title),
+private fun FavoritesHeader(modifier: Modifier = Modifier) = Text(
+    stringResource(R.string.dashboard_home_section_favorites_title),
     style = MaterialTheme.typography.headlineMedium,
     modifier = modifier.fillMaxWidth()
 )
 
 @Composable
-private fun FeaturedLessonsHeader(modifier: Modifier = Modifier) = Text(
-    stringResource(R.string.dashboard_home_section_featured_lesson),
-    style = MaterialTheme.typography.titleLarge,
-    modifier = modifier.fillMaxWidth()
-)
-
-@Composable
-private fun FavoritesHeader(state: UiState, modifier: Modifier = Modifier) = Row(modifier = modifier.fillMaxWidth()) {
-    val eventSink by rememberUpdatedState(state.eventSink)
-
-    Text(
-        stringResource(R.string.dashboard_home_section_favorites_title),
-        style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier
-            .weight(1f)
-            .alignByBaseline()
-    )
-
-    AnimatedVisibility(
-        state.favoriteTools.isNotEmpty(),
-        enter = fadeIn(),
-        exit = fadeOut(),
-        modifier = Modifier.alignByBaseline()
-    ) {
-        Text(
-            stringResource(R.string.dashboard_home_section_favorites_action_view_all),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.clickable { eventSink(UiEvent.ViewAllFavorites) }
-        )
+private fun MutableInteractionSource.reorderableDragInteractions(isDragging: Boolean) {
+    val dragState = remember {
+        object {
+            var start: DragInteraction.Start? = null
+        }
     }
-}
-
-@Composable
-private fun HorizontalFavoriteTools(state: UiState, modifier: Modifier = Modifier) {
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
-    ) {
-        items(state.favoriteTools, key = { it.toolCode.orEmpty() }) { toolState ->
-            SquareToolCard(
-                state = toolState,
-                confirmRemovalFromFavorites = true,
-                modifier = Modifier.animateItem()
-            )
+    LaunchedEffect(isDragging) {
+        val start = dragState.start
+        if (isDragging && start == null) {
+            dragState.start = DragInteraction.Start().also { emit(it) }
+        } else if (!isDragging && start != null) {
+            dragState.start = null
+            emit(DragInteraction.Stop(start))
         }
     }
 }

@@ -106,6 +106,7 @@ class ToolFiltersTest {
             CategoryFilter(
                 UiState(
                     items = persistentListOf(
+                        Item(null, 2),
                         Item(Tool.CATEGORY_GOSPEL, 1),
                         Item(Tool.CATEGORY_ARTICLES, 1)
                     ),
@@ -116,6 +117,7 @@ class ToolFiltersTest {
         }
         composeTestRule.onNode(hasClickAction()).performClick()
 
+        composeTestRule.onNodeWithText("2 Tools available").assertExists()
         composeTestRule.onNodeWithText("Any category", substring = true, ignoreCase = true).performClick()
         composeTestRule.onNodeWithTag(TEST_TAG_FILTER_DROPDOWN).assertDoesNotExist()
         events.assertEvent(Event.SelectItem(null))

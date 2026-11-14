@@ -15,6 +15,7 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.foundation.rememberAnsweringNavigator
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
+import com.slack.circuit.runtime.GoToNavigator
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
@@ -56,13 +57,22 @@ class OnboardingPresenter @AssistedInject constructor(
     @Composable
     override fun present(): UiState {
         var languageWasSet by rememberSaveable { mutableStateOf(false) }
-        var hasSeenCountrySettings by rememberSaveable { mutableStateOf(false) }
+        var countryWasSet by rememberSaveable { mutableStateOf(false) }
         val pagerState = rememberPagerState(pageCount = { 4 })
         val scope = rememberCoroutineScope()
-        val countrySettingsNavigator = rememberAnsweringNavigator<CountrySettingsScreen.Result>(navigator) {
-            hasSeenCountrySettings = true
-            scope.launch {
-                pagerState.navigateToPage(1)
+        // the country and language navigators lead to each other, so one has to be resolved lazily
+        lateinit var nextButtonNavigator: GoToNavigator
+        val countrySettingsNavigator = rememberAnsweringNavigator<CountrySettingsScreen.Result>(navigator) { result ->
+            when (result) {
+                CountrySettingsScreen.Result.CountrySelected -> {
+                    countryWasSet = true
+                    scope.launch {
+                        pagerState.navigateToPage(1)
+                    }
+                }
+
+                // a country selection is required, so backing out returns to the language selection
+                CountrySettingsScreen.Result.Dismissed -> nextButtonNavigator.goTo(AppLanguageScreen)
             }
         }
         val languageButtonNavigator = rememberAnsweringNavigator<AppLanguageScreen.Result>(navigator) { result ->
@@ -70,7 +80,7 @@ class OnboardingPresenter @AssistedInject constructor(
                 languageWasSet = true
             }
         }
-        val nextButtonNavigator = rememberAnsweringNavigator<AppLanguageScreen.Result>(navigator) { result ->
+        nextButtonNavigator = rememberAnsweringNavigator<AppLanguageScreen.Result>(navigator) { result ->
             if (result is AppLanguageScreen.Result.LanguageSelected) {
                 languageWasSet = true
                 countrySettingsNavigator.goTo(CountrySettingsScreen)
@@ -79,14 +89,14 @@ class OnboardingPresenter @AssistedInject constructor(
         LaunchedEffect(Unit) { settings.setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING) }
         return UiState(
             pagerState = pagerState,
-            userScrollEnabled = (languageWasSet && hasSeenCountrySettings) || pagerState.currentPage > 0
+            userScrollEnabled = (languageWasSet && countryWasSet) || pagerState.currentPage > 0
         ) { event ->
             when (event) {
                 UiEvent.ChangeLanguage -> languageButtonNavigator.goTo(AppLanguageScreen)
 
                 UiEvent.Next -> when {
                     !languageWasSet -> nextButtonNavigator.goTo(AppLanguageScreen)
-                    !hasSeenCountrySettings -> countrySettingsNavigator.goTo(CountrySettingsScreen)
+                    !countryWasSet -> countrySettingsNavigator.goTo(CountrySettingsScreen)
                     else -> scope.launch { pagerState.navigateToPage() }
                 }
 
