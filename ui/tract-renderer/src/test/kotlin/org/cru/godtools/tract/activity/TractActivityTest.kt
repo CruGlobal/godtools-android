@@ -280,6 +280,21 @@ class TractActivityTest {
     }
     // endregion Intent Processing
 
+    // region Live Share
+    @Test
+    fun `startLiveShareSubscriberIfNecessary() - Ignore non-hierarchical data uri`() {
+        val intent = context.createTractActivityIntent(TOOL, Locale.ENGLISH)
+            .setData(Uri.parse("mailto:someone@example.com"))
+
+        scenario(intent) {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+    // endregion Live Share
+
     private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 
     private fun everyGetManifestFlow(tool: String? = null, locale: Locale? = null) =
