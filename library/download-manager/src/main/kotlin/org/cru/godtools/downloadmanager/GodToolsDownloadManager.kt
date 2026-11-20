@@ -162,7 +162,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     // region Attachments
     internal suspend fun downloadAttachment(attachmentId: Long): Boolean {
-        require(fs.exists())
+        if (!fs.exists()) return false
 
         attachmentsMutex.withLock(attachmentId) {
             val attachment = attachmentsRepository.findAttachment(attachmentId) ?: return true
@@ -251,7 +251,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         downloadLatestPublishedTranslation(TranslationKey(code, locale))
 
     internal suspend fun downloadLatestPublishedTranslation(key: TranslationKey): Boolean {
-        require(fs.exists())
+        if (!fs.exists()) return false
 
         translationsMutex.withLock(key) {
             val translation = translationsRepository.findLatestTranslation(key.tool, key.locale)
