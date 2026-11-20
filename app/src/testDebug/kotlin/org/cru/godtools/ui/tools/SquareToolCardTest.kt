@@ -41,6 +41,13 @@ class SquareToolCardTest {
     }
 
     @Test
+    fun `SquareToolCard(showFavoriteAction=false)`() {
+        composeTestRule.setContent { SquareToolCard(UiState(tool = randomTool()), showFavoriteAction = false) }
+
+        composeTestRule.onNodeWithTag(TEST_TAG_FAVORITE_ACTION).assertDoesNotExist()
+    }
+
+    @Test
     fun `SquareToolCard() - Event - Click`() {
         composeTestRule.setContent { SquareToolCard(UiState(eventSink = events)) }
 

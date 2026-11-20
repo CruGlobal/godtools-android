@@ -44,7 +44,6 @@
     <!-- Home -->
     <string name="nav_favorite_tools">Gunstelinge</string>
     <string name="dashboard_home_header_title">Welkom by GodTools</string>
-    <string name="dashboard_home_section_featured_lesson">Les in die kollig</string>
     <string name="dashboard_home_section_favorites_title">Jou gunsteling hulpmiddels</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Geen gunsteling hulpmiddel om te vertoon nie</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Tik op die hart-ikoon om dit ’n gunsteling hulpmiddel te maak wat vanlyn af beskikbaar is.</string>

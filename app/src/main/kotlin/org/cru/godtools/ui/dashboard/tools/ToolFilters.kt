@@ -96,17 +96,10 @@ internal fun CategoryFilter(state: FilterMenu.UiState<String?>, modifier: Modifi
                 .heightIn(max = DROPDOWN_MAX_HEIGHT)
                 .testTag(TEST_TAG_FILTER_DROPDOWN)
         ) {
-            FilterMenuItem(
-                label = stringResource(R.string.dashboard_tools_section_filter_category_any),
-                supportingText = stringResource(R.string.dashboard_tools_section_filter_available_tools_all),
-                onClick = {
-                    eventSink(FilterMenu.Event.SelectItem(null))
-                    expanded = false
-                }
-            )
             categories.forEach { (category, count) ->
                 FilterMenuItem(
-                    label = getToolCategoryName(category, LocalContext.current),
+                    label = category?.let { getToolCategoryName(it, LocalContext.current) }
+                        ?: stringResource(R.string.dashboard_tools_section_filter_category_any),
                     supportingText = pluralStringResource(
                         R.plurals.dashboard_tools_section_filter_available_tools,
                         count,
@@ -148,11 +141,11 @@ internal fun LanguageFilter(state: FilterMenu.UiState<Language?>, mode: Mode, mo
                 else -> LanguageName(lang)
             }
         },
-        itemSupportingText = { (lang, count) ->
-            when {
-                mode == Mode.PERSONALIZATION -> null
-                lang == null -> stringResource(R.string.dashboard_tools_section_filter_available_tools_all)
-                else -> pluralStringResource(R.plurals.dashboard_tools_section_filter_available_tools, count, count)
+        itemSupportingText = { (_, count) ->
+            if (mode == Mode.PERSONALIZATION) {
+                null
+            } else {
+                pluralStringResource(R.plurals.dashboard_tools_section_filter_available_tools, count, count)
             }
         },
         modifier = modifier,

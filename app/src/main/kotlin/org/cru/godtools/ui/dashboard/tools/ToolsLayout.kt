@@ -6,22 +6,17 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -32,6 +27,7 @@ import org.cru.godtools.R
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.dashboard.LocalizationSettingsBox
+import org.cru.godtools.ui.dashboard.PersonalizationUnavailable
 import org.cru.godtools.ui.dashboard.personalization.rememberFloatLastItemsToBottomArrangement
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
@@ -47,13 +43,18 @@ internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
     val filters by rememberUpdatedState(state.filters)
     val tools by rememberUpdatedState(state.tools)
 
+    val isPersonalization = state.mode == UiState.Mode.PERSONALIZATION
+    val showPersonalizationUnavailable = isPersonalization && state.dataLoaded && tools.isEmpty()
+    // the unavailable panel already offers the localization settings action
+    val showLocalizationSettingsBox = isPersonalization && !showPersonalizationUnavailable
+
     val columnState = rememberLazyListState()
     LaunchedEffect(state.banner?.type) { if (state.banner != null) columnState.animateScrollToItem(0) }
 
     LazyColumn(
         state = columnState,
         verticalArrangement = rememberFloatLastItemsToBottomArrangement(
-            numToFloat = if (state.mode == UiState.Mode.PERSONALIZATION) 1 else 0
+            numToFloat = if (showLocalizationSettingsBox) 1 else 0
         ),
         modifier = modifier.fillMaxHeight()
     ) {
@@ -66,18 +67,6 @@ internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
                     .animateItem()
                     .fillMaxWidth()
             )
-        }
-
-        if (state.isPersonalizationEnabled) {
-            item("mode-toggle", "mode-toggle") {
-                PersonalizationToggle(
-                    state,
-                    modifier = Modifier
-                        .padding(horizontal = MARGIN_TOOLS_LAYOUT_HORIZONTAL)
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
-            }
         }
 
         item("header", "header") {
@@ -132,7 +121,25 @@ internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
             )
         }
 
-        if (state.mode == UiState.Mode.PERSONALIZATION) {
+        if (showPersonalizationUnavailable) {
+            item("personalization-unavailable", "personalization-unavailable") {
+                PersonalizationUnavailable(
+                    title = R.string.dashboard_tools_section_personalized_no_tools_title,
+                    description = R.string.dashboard_tools_section_personalized_no_tools_description,
+                    goToAllAction = R.string.dashboard_tools_section_personalized_no_tools_action_all_tools,
+                    onChangeLocalizationSettings = { state.eventSink(UiEvent.OpenLocalizationSettings) },
+                    onGoToAll = { state.eventSink(UiEvent.ChangeMode(UiState.Mode.ALL_TOOLS)) },
+                    // the filters above already provide 16dp of bottom padding
+                    modifier = Modifier.padding(
+                        start = MARGIN_TOOLS_LAYOUT_HORIZONTAL,
+                        end = MARGIN_TOOLS_LAYOUT_HORIZONTAL,
+                        bottom = 16.dp,
+                    ),
+                )
+            }
+        }
+
+        if (showLocalizationSettingsBox) {
             item("localization-settings-box", "localization-settings-box") {
                 LocalizationSettingsBox(
                     title = R.string.dashboard_tools_section_personalized_localization_title,
@@ -140,27 +147,6 @@ internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
                     onClickSettings = { state.eventSink(UiEvent.OpenLocalizationSettings) }
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun PersonalizationToggle(state: UiState, modifier: Modifier = Modifier) {
-    SingleChoiceSegmentedButtonRow(modifier = modifier) {
-        SegmentedButton(
-            selected = state.mode == UiState.Mode.PERSONALIZATION,
-            onClick = { state.eventSink(UiEvent.ChangeMode(UiState.Mode.PERSONALIZATION)) },
-            shape = SegmentedButtonDefaults.itemShape(0, 2),
-        ) {
-            Text(stringResource(R.string.dashboard_tools_toggle_personalized))
-        }
-
-        SegmentedButton(
-            selected = state.mode == UiState.Mode.ALL_TOOLS,
-            onClick = { state.eventSink(UiEvent.ChangeMode(UiState.Mode.ALL_TOOLS)) },
-            shape = SegmentedButtonDefaults.itemShape(1, 2),
-        ) {
-            Text(stringResource(R.string.dashboard_tools_toggle_all))
         }
     }
 }

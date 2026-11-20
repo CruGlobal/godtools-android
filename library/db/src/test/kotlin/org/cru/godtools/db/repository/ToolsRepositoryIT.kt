@@ -323,6 +323,39 @@ abstract class ToolsRepositoryIT {
     }
     // endregion getFeaturedToolsFlow()
 
+    // region getFeaturedLessonsFlow()
+    @Test
+    fun `getFeaturedLessonsFlow() - empty when no order stored`() = testScope.runTest {
+        repository.storeInitialTools(listOf(randomTool("lesson", Tool.Type.LESSON)))
+        assertTrue(repository.getFeaturedLessonsFlow(Locale.ENGLISH, null).first().isEmpty())
+    }
+
+    @Test
+    fun `getFeaturedLessonsFlow() - returns only lessons in featured order`() = testScope.runTest {
+        val tract = randomTool("tract", Tool.Type.TRACT)
+        val lesson1 = randomTool("lesson1", Tool.Type.LESSON)
+        val lesson2 = randomTool("lesson2", Tool.Type.LESSON)
+        val meta = randomTool("meta", Tool.Type.META)
+        repository.storeInitialTools(listOf(tract, lesson1, lesson2, meta))
+
+        repository.storeFeaturedToolsFromSync(Locale.ENGLISH, "US", listOf(lesson2, tract, meta, lesson1))
+        assertEquals(
+            listOf("lesson2", "lesson1"),
+            repository.getFeaturedLessonsFlow(Locale.ENGLISH, "US").first().map { it.code }
+        )
+    }
+
+    @Test
+    fun `getFeaturedLessonsFlow() - scoped to locale and country`() = testScope.runTest {
+        val lesson = randomTool("lesson", Tool.Type.LESSON)
+        repository.storeInitialTools(listOf(lesson))
+
+        repository.storeFeaturedToolsFromSync(Locale.ENGLISH, "US", listOf(lesson))
+        assertTrue(repository.getFeaturedLessonsFlow(Locale.FRENCH, "US").first().isEmpty())
+        assertTrue(repository.getFeaturedLessonsFlow(Locale.ENGLISH, "CA").first().isEmpty())
+    }
+    // endregion getFeaturedLessonsFlow()
+
     // region getPersonalizedToolsFlow()
     @Test
     fun `getPersonalizedToolsFlow() - empty when no order stored`() = testScope.runTest {

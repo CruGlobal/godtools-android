@@ -149,7 +149,12 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
                         }
                     },
                     modifier = Modifier.clickable {
-                        eventSink(UiEvent.SelectCountry(null))
+                        coroutineScope.launch {
+                            if (state.countryCode != null) {
+                                if (!overlayHost.show(CountrySettingsConfirmationOverlay(null))) return@launch
+                            }
+                            eventSink(UiEvent.SelectCountry(null))
+                        }
                     },
                 )
             }

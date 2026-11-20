@@ -188,6 +188,19 @@ class FilteredToolsFlowProducerTest {
     }
 
     @Test
+    fun `getFlow - Personalization mode - falls back to language only when country-specific tools are all hidden`() =
+        runTest {
+            val hidden = createTool(isHidden = true)
+            val fallbackTool = createTool()
+            countryFlow.value = "US"
+            every { toolsRepository.getPersonalizedToolsFlow(Locale.ENGLISH, "US") } returns flowOf(listOf(hidden))
+            every { toolsRepository.getPersonalizedToolsFlow(Locale.ENGLISH, null) } returns
+                flowOf(listOf(fallbackTool))
+
+            assertEquals(listOf(fallbackTool), producer.getFlow(mode = Mode.PERSONALIZATION).first())
+        }
+
+    @Test
     fun `getFlow - Personalization mode - hidden tools are excluded`() = runTest {
         val hidden = createTool(isHidden = true)
         val visible = createTool(isHidden = false)

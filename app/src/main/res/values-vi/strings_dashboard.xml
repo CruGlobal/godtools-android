@@ -43,7 +43,6 @@ Một phiên bản trực tuyến có thể tìm thấy ở https://knowgod.com/
     <!-- Home -->
     <string name="nav_favorite_tools">Yêu thích</string>
     <string name="dashboard_home_header_title">Chào mừng đến với GodTools</string>
-    <string name="dashboard_home_section_featured_lesson">Bài học đặc sắc</string>
     <string name="dashboard_home_section_favorites_title">Công cụ yêu thích của bạn</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Không có công cụ yêu thích nào</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Bấm vào biểu tượng trái tim để đánh dấu công cụ yêu thích và sử dụng ngay cả khi không có internet.</string>

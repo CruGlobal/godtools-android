@@ -43,7 +43,6 @@
     <!-- Home -->
     <string name="nav_favorite_tools">お気に入り</string>
     <string name="dashboard_home_header_title">GodToolsへようこそ</string>
-    <string name="dashboard_home_section_featured_lesson">注目のレッスン</string>
     <string name="dashboard_home_section_favorites_title">お気に入りのツール</string>
     <string name="dashboard_home_section_favorites_no_tools_title">表示できるお気に入りのツールはありません</string>
     <string name="dashboard_home_section_favorites_no_tools_description">ハートアイコンをタップしてツールをお気に入りに追加し、オフラインでも使用できるようにしましょう。</string>

@@ -43,7 +43,6 @@ Marsariitii https://knowgod.com/ irrattis argachuu ni dandeessa.</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Kan jaallataman</string>
     <string name="dashboard_home_header_title">Baga nagaan gara GodTools\'tti dhufte</string>
-    <string name="dashboard_home_section_featured_lesson">Barannoo addatti dhiyaate</string>
     <string name="dashboard_home_section_favorites_title">Barruuwwan ati jaallatte</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Barruun jaallatamoon hin jiran.</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Barruu tokko jaallatamootti dabaluuf mallattoo onnee tuqi.</string>

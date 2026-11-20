@@ -44,7 +44,6 @@ https://knowgod.com/-তে একটি অনলাইন সংস্কর�
     <!-- Home -->
     <string name="nav_favorite_tools">পছন্দসই</string>
     <string name="dashboard_home_header_title">GodTools-এ স্বাগতম</string>
-    <string name="dashboard_home_section_featured_lesson">ফিচার করা পাঠ</string>
     <string name="dashboard_home_section_favorites_title">আপনার পছন্দসই সাধনীসমূহ</string>
     <string name="dashboard_home_section_favorites_no_tools_title">প্রদর্শন করার জন্য কোনো পছন্দসই সাধনী নেই</string>
     <string name="dashboard_home_section_favorites_no_tools_description">কোনো সাধনীকে পছন্দসই করতে হার্ট আইকনে ট্যাপ করুন এবং এটি অনলাইনে উপলভ্য করুন।</string>

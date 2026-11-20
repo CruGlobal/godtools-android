@@ -30,6 +30,7 @@ fun SquareToolCard(
     showCategory: Boolean = true,
     showSecondLanguage: Boolean = false,
     showActions: Boolean = true,
+    showFavoriteAction: Boolean = true,
     floatParallelLanguageUp: Boolean = true,
     confirmRemovalFromFavorites: Boolean = false,
 ) {
@@ -49,11 +50,13 @@ fun SquareToolCard(
                         .fillMaxWidth()
                         .aspectRatio(189f / 128f)
                 )
-                FavoriteAction(
-                    state = state,
-                    modifier = Modifier.align(Alignment.TopEnd),
-                    confirmRemoval = confirmRemovalFromFavorites
-                )
+                if (showFavoriteAction) {
+                    FavoriteAction(
+                        state = state,
+                        modifier = Modifier.align(Alignment.TopEnd),
+                        confirmRemoval = confirmRemovalFromFavorites
+                    )
+                }
                 DownloadProgressIndicator(
                     { downloadProgress },
                     modifier = Modifier

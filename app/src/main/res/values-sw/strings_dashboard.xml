@@ -44,7 +44,6 @@ Toleo la mtandao linaweza kupatikana kwenye https://knowgod.com/</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Vipendwa</string>
     <string name="dashboard_home_header_title">Karibu kwenye GodTools</string>
-    <string name="dashboard_home_section_featured_lesson">Somo lililoangaziwa</string>
     <string name="dashboard_home_section_favorites_title">Zana uzipendazo</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Hakuna zana unazozipenda za kuonesha</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Gusa ikoni ya moyo ili kuonesha kupendezwa na zana hiyo na kufanya ipatikane bila mtandao. </string>

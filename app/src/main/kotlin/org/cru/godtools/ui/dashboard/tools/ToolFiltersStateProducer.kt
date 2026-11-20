@@ -121,10 +121,12 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
 
     @Composable
     private fun rememberFilterCategories(mode: Mode, selectedLanguage: Locale?) = remember(mode, selectedLanguage) {
-        filteredToolsFlowProducer.getFlow(mode, language = selectedLanguage).map {
-            it.filterNot { it.category == null }
+        filteredToolsFlowProducer.getFlow(mode, language = selectedLanguage).map { tools ->
+            // the "any category" item counts every tool, including those without a category
+            val categories = tools.filterNot { it.category == null }
                 .groupBy { it.category }
-                .map { (category, tools) -> FilterMenu.UiState.Item(category, tools.size) }
+                .map { (category, categoryTools) -> FilterMenu.UiState.Item(category, categoryTools.size) }
+            listOf(FilterMenu.UiState.Item<String?>(null, tools.size)) + categories
         }
     }.collectAsState(emptyList()).value
 
@@ -159,11 +161,14 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
             val toolCountsFlow = filteredToolsFlowProducer.getFlow(mode, category = category)
                 .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
                 .distinctUntilChanged()
-                .flatMapLatest { translationsRepository.getTranslationsFlowForTools(it) }
-                .map { translations ->
-                    translations
-                        .groupBy { it.languageCode }
-                        .mapValues { it.value.distinctBy { it.toolCode }.count() }
+                .flatMapLatest { toolCodes ->
+                    translationsRepository.getTranslationsFlowForTools(toolCodes).map { translations ->
+                        translations
+                            .groupBy { it.languageCode }
+                            .mapValues { it.value.distinctBy { it.toolCode }.count() }
+                            // the "any language" item (null key) counts every tool, regardless of translations
+                            .plus(null to toolCodes.size)
+                    }
                 }
 
             combine(

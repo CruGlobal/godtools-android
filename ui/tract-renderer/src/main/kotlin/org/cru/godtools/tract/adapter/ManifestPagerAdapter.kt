@@ -102,8 +102,17 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
 
     // region TractPageState
     private val pageStates = mutableMapOf<String, TractPageState>()
-    private fun pageState(page: TractPage) =
-        pageStates.getOrPut(page.id) { TractPageState(page) }.also { it.updatePage(page) }
+    private fun pageState(page: TractPage): TractPageState {
+        val existing = pageStates[page.id] ?: return TractPageState(page).also { pageStates[page.id] = it }
+        if (existing.page == page) return existing
+
+        // TractPageState.updatePage() leaves visibleCards/activeCard derived from the original page, which crashes
+        // navigation after a language switch. Rebuild the state for the new page, carrying over the card state.
+        val saved = with(TractPageState.Saver(existing.page)) { SaverScope { true }.save(existing) }
+        val rebuilt = saved?.let { TractPageState.Saver(page).restore(it) } ?: TractPageState(page)
+        pageStates[page.id] = rebuilt
+        return rebuilt
+    }
     // endregion TractPageState
 
     // region Lifecycle

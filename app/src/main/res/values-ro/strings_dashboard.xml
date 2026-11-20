@@ -45,7 +45,6 @@ Găsești versiunea online aici https://knowgod.com/</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favorite</string>
     <string name="dashboard_home_header_title">Bun venit la GodTools</string>
-    <string name="dashboard_home_section_featured_lesson">Lecție recomandată</string>
     <string name="dashboard_home_section_favorites_title">Instrumentele tale preferate</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Niciun instrument preferat de afișat</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Atinge pictograma inimă pentru a adăuga la favorite un instrument și a-l face disponibil offline.</string>

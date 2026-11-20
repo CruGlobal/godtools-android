@@ -30,6 +30,7 @@ interface ToolsRepository {
         .map { it.filter { it.isFavorite }.sortedWith(Tool.COMPARATOR_FAVORITE_ORDER) }
 
     // region Personalized Tools
+    fun getFeaturedLessonsFlow(locale: Locale, country: String?): Flow<List<Tool>>
     fun getFeaturedToolsFlow(locale: Locale, country: String?): Flow<List<Tool>>
     fun getPersonalizedLessonsFlow(locale: Locale, country: String?): Flow<List<Tool>>
     fun getPersonalizedToolsFlow(locale: Locale, country: String?): Flow<List<Tool>>

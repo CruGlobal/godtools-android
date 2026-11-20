@@ -3,6 +3,7 @@ package org.cru.godtools.ui.dashboard.lessons
 import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import io.mockk.verifyAll
 import java.util.Locale
 import kotlin.test.Test
@@ -25,6 +26,7 @@ class LessonsFlowProducerTest {
         every { getPersonalizationCountryFlow() } returns countryFlow
     }
     private val toolsRepository: ToolsRepository = mockk {
+        every { getFeaturedLessonsFlow(any(), any()) } returns flowOf(emptyList())
         every { getLessonsFlowByLanguage(any()) } returns flowOf(emptyList())
         every { getPersonalizedLessonsFlow(any(), any()) } returns flowOf(emptyList())
     }
@@ -91,6 +93,21 @@ class LessonsFlowProducerTest {
     }
 
     @Test
+    fun `getFlow - Personalization - falls back to language only when country-specific lessons are all hidden`() =
+        runTest {
+            val hidden = createLesson(isHidden = true)
+            val fallback = createLesson()
+            countryFlow.value = "US"
+            every { toolsRepository.getPersonalizedLessonsFlow(Locale.ENGLISH, "US") } returns flowOf(listOf(hidden))
+            every { toolsRepository.getPersonalizedLessonsFlow(Locale.ENGLISH, null) } returns flowOf(listOf(fallback))
+
+            assertEquals(
+                listOf(fallback),
+                producer.getFlow(mode = Mode.PERSONALIZATION, locale = Locale.ENGLISH).first(),
+            )
+        }
+
+    @Test
     fun `getFlow - Personalization - excludes hidden lessons`() = runTest {
         val hidden = createLesson(isHidden = true)
         val visible = createLesson(isHidden = false)
@@ -112,6 +129,45 @@ class LessonsFlowProducerTest {
         }
     }
     // endregion PERSONALIZATION mode
+
+    // region getFeaturedFlow()
+    @Test
+    fun `getFeaturedFlow - uses getFeaturedLessonsFlow with the provided locale and country`() = runTest {
+        countryFlow.value = "US"
+        producer.getFeaturedFlow(Locale.FRENCH).first()
+        verify { toolsRepository.getFeaturedLessonsFlow(Locale.FRENCH, "US") }
+        verify(exactly = 0) { toolsRepository.getFeaturedLessonsFlow(Locale.ENGLISH, any()) }
+    }
+
+    @Test
+    fun `getFeaturedFlow - empty when no country is selected`() = runTest {
+        assertEquals(emptyList(), producer.getFeaturedFlow(Locale.ENGLISH).first())
+        verify(exactly = 0) { toolsRepository.getFeaturedLessonsFlow(any(), any()) }
+    }
+
+    @Test
+    fun `getFeaturedFlow - excludes hidden lessons`() = runTest {
+        val hidden = createLesson(isHidden = true)
+        val visible = createLesson(isHidden = false)
+        countryFlow.value = "US"
+        every { toolsRepository.getFeaturedLessonsFlow(any(), any()) } returns flowOf(listOf(hidden, visible))
+
+        assertEquals(listOf(visible), producer.getFeaturedFlow(Locale.ENGLISH).first())
+    }
+
+    @Test
+    fun `getFeaturedFlow - updates when country changes`() = runTest {
+        val usLesson = createLesson()
+        every { toolsRepository.getFeaturedLessonsFlow(Locale.ENGLISH, "US") } returns flowOf(listOf(usLesson))
+
+        producer.getFeaturedFlow(Locale.ENGLISH).test {
+            assertEquals(emptyList(), awaitItem())
+
+            countryFlow.value = "US"
+            assertEquals(listOf(usLesson), awaitItem())
+        }
+    }
+    // endregion getFeaturedFlow()
 
     private fun createLesson(defaultOrder: Int = 0, isHidden: Boolean = false) =
         randomTool(type = Tool.Type.LESSON, defaultOrder = defaultOrder, isHidden = isHidden)

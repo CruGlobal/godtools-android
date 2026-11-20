@@ -25,12 +25,15 @@ internal class FilteredToolsFlowProducer @Inject constructor(
         val baseFlow = when {
             mode == Mode.PERSONALIZATION -> {
                 val languageFlow = if (language != null) flowOf(language) else settings.appLanguageFlow
+                // hidden tools are filtered before the fallback so they don't count as a populated list
                 val fallbackFlow = languageFlow.flatMapLatest { toolsRepository.getPersonalizedToolsFlow(it, null) }
+                    .map { it.filterNot { it.isHidden } }
 
                 languageFlow
                     .combineTransformLatest(settings.getPersonalizationCountryFlow()) { language, country ->
                         emitAll(toolsRepository.getPersonalizedToolsFlow(language, country))
                     }
+                    .map { it.filterNot { it.isHidden } }
                     .combine(fallbackFlow) { personalized, fallback -> personalized.ifEmpty { fallback } }
                     .distinctUntilChanged()
             }

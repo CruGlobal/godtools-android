@@ -45,7 +45,6 @@ Rīku tīmekļa versijas ir pieejamas: https://KnowGod.com/lv</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Izlase</string>
     <string name="dashboard_home_header_title">Sveiki!</string>
-    <string name="dashboard_home_section_featured_lesson">Iesakām tev šo nodarbību</string>
     <string name="dashboard_home_section_favorites_title">Tava rīku izlase</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Nav iecienīto rīku, ko parādīt</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Nospiežot sirds ikonu, rīks tiks pievienots izlasei un būs pieejams bezsaistē.</string>
