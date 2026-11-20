@@ -10,6 +10,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import java.util.Locale
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -64,6 +65,7 @@ class ExternalSingletonsModule {
     @get:Provides
     val settings by lazy {
         mockk<Settings> {
+            every { appLanguageFlow } returns MutableStateFlow(Locale.ENGLISH).asStateFlow()
             every { setFeatureDiscovered(any()) } just Runs
             every { isFeatureDiscovered(any()) } returns true
             every { isFeatureDiscoveredLiveData(any()) } answers { ImmutableLiveData(true) }

@@ -12,10 +12,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.fluidsonic.locale.toPlatform
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
@@ -167,8 +170,8 @@ class SettingsBottomSheetDialogFragment() :
         parallelLocale: Locale? = activityDataModel.parallelLocales.value?.firstOrNull(),
     ) {
         if (isSaveLanguageSettings && tool != null) {
-            lifecycleScope.launch {
-                toolsRepository.updateToolLocales(tool, primaryLocale, parallelLocale)
+            lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
+                withContext(NonCancellable) { toolsRepository.updateToolLocales(tool, primaryLocale, parallelLocale) }
             }
         }
     }
