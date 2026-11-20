@@ -57,6 +57,7 @@ abstract class BaseSingleToolActivity<B : ViewBinding>(
             }
         }
 
+    override val isInitialSyncFinished get() = dataModel.isInitialSyncFinished
     override val toolsToDownload by lazy {
         dataModel.toolCode
             .map { listOfNotNull(it) }
@@ -69,8 +70,18 @@ abstract class BaseSingleToolActivity<B : ViewBinding>(
     }
 
     override val activeToolLoadingStateLiveData by lazy {
-        viewModel.manifest.asLiveData().combineWith(dataModel.translation, isConnected) { m, t, isConnected ->
-            LoadingState.determineToolState(m, t, manifestType = supportedType, isConnected = isConnected)
+        viewModel.manifest.asLiveData().combineWith(
+            dataModel.translation,
+            isConnected,
+            dataModel.isInitialSyncFinished.asLiveData(),
+        ) { m, t, isConnected, isSyncFinished ->
+            LoadingState.determineToolState(
+                m,
+                t,
+                manifestType = supportedType,
+                isConnected = isConnected,
+                isSyncFinished = isSyncFinished,
+            )
         }.distinctUntilChanged()
     }
 
