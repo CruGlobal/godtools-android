@@ -12,14 +12,20 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
+import io.mockk.verify
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import org.cru.godtools.api.TractShareService
+import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.HOST_DYNALINKS
@@ -29,6 +35,8 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
+import org.cru.godtools.tract.liveshare.TractSubscriberController
+import org.greenrobot.eventbus.EventBus
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -47,7 +55,11 @@ class TractActivityTest {
 
     private val context get() = ApplicationProvider.getApplicationContext<Context>()
     @Inject
+    lateinit var eventBus: EventBus
+    @Inject
     lateinit var manifestManager: ManifestManager
+    @Inject
+    lateinit var tractShareService: TractShareService
     @Inject
     lateinit var translationsRepository: TranslationsRepository
 
@@ -280,7 +292,29 @@ class TractActivityTest {
     }
     // endregion Intent Processing
 
+    // region startLiveShareSubscriberIfNecessary()
+    @Test
+    fun `startLiveShareSubscriberIfNecessary() - Repeated NavigationEvent still navigates`() {
+        everyGetManifestFlow() returns MutableSharedFlow()
+        every { tractShareService.subscribe(any()) } just Runs
+        every { tractShareService.unsubscribe(any()) } just Runs
+        every { tractShareService.webSocketEvents() } returns Channel()
+        every { tractShareService.navigationEvents() } returns Channel()
+
+        deepLinkScenario(Uri.parse("https://knowgod.com/en/tool/v1/kgp?primaryLanguage=en&liveShareStream=stream")) {
+            it.onActivity {
+                it.subscriberController.receivedEvent.value = NavigationEvent("kgp", Locale.ENGLISH, 3)
+                // the publisher re-broadcasts its last event to resync subscribers after reconnecting
+                it.subscriberController.receivedEvent.value = NavigationEvent("kgp", Locale.ENGLISH, 3)
+            }
+
+            verify(exactly = 2) { eventBus.post(NavigationEvent("kgp", Locale.ENGLISH, 3)) }
+        }
+    }
+    // endregion startLiveShareSubscriberIfNecessary()
+
     private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
+    private val TractActivity.subscriberController get() = viewModels<TractSubscriberController>().value
 
     private fun everyGetManifestFlow(tool: String? = null, locale: Locale? = null) =
         every { (manifestManager.getLatestPublishedManifestFlow(tool ?: any(), locale ?: any())) }
