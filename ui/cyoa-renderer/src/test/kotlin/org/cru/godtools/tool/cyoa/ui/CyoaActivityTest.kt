@@ -15,6 +15,8 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import io.fluidsonic.locale.toCommon
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
@@ -43,6 +45,7 @@ import org.cru.godtools.shared.tool.parser.model.page.PageCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.backgroundColor
 import org.cru.godtools.shared.tool.parser.model.page.backgroundImageGravity
 import org.cru.godtools.shared.tool.parser.model.page.backgroundImageScaleType
+import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tool.cyoa.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.cyoa.R
 import org.junit.Rule
@@ -71,6 +74,8 @@ class CyoaActivityTest {
     // region Mocks
     @Inject
     internal lateinit var manifestManager: ManifestManager
+    @Inject
+    internal lateinit var syncService: GodToolsSyncService
 
     private val manifestEnglish = MutableStateFlow<Manifest?>(null)
 
@@ -736,6 +741,30 @@ class CyoaActivityTest {
         }
     }
     // endregion Update Manifest
+
+    // region Initial Sync
+    @Test
+    fun `Initial Sync - successful sync finishes initial sync`() {
+        scenario {
+            it.onActivity {
+                coVerify { syncService.syncTool(TOOL, any()) }
+                assertTrue(it.dataModel.isInitialSyncFinished.value)
+            }
+        }
+    }
+
+    @Test
+    fun `Initial Sync - failed sync doesn't finish initial sync`() {
+        coEvery { syncService.syncTool(any(), any()) } returns false
+
+        scenario {
+            it.onActivity {
+                coVerify { syncService.syncTool(TOOL, any()) }
+                assertFalse(it.dataModel.isInitialSyncFinished.value)
+            }
+        }
+    }
+    // endregion Initial Sync
 
     private val CyoaActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 
