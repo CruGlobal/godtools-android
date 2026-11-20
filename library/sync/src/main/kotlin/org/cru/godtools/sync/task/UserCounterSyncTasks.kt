@@ -27,7 +27,6 @@ internal class UserCounterSyncTasks @Inject internal constructor(
     }
 
     private val countersMutex = Mutex()
-    private val countersUpdateMutex = Mutex()
 
     suspend fun syncCounters(force: Boolean): Boolean = countersMutex.withLock {
         if (!accountManager.isAuthenticated) return true
@@ -56,7 +55,7 @@ internal class UserCounterSyncTasks @Inject internal constructor(
         true
     }
 
-    suspend fun syncDirtyCounters(): Boolean = countersUpdateMutex.withLock {
+    suspend fun syncDirtyCounters(): Boolean = countersMutex.withLock {
         if (!accountManager.isAuthenticated) return true
 
         coroutineScope {
