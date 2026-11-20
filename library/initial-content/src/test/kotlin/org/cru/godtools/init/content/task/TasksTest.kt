@@ -6,6 +6,7 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyAll
+import io.mockk.coVerifySequence
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.just
@@ -98,12 +99,13 @@ class TasksTest {
         every { jsonApiConverter.fromJson(any(), Tool::class.java) } returns JsonApiObject.of(*tools)
 
         tasks.initFavoriteTools(tasks.bundledData())
-        coVerifyAll {
+        coVerifySequence {
             toolsRepository.getNormalTools()
             toolsRepository.pinTool("1", trackChanges = false)
+            toolsRepository.pinTool("5", trackChanges = false)
             toolsRepository.pinTool("2", trackChanges = false)
             toolsRepository.pinTool("3", trackChanges = false)
-            toolsRepository.pinTool("5", trackChanges = false)
+            toolsRepository.storeToolOrder(listOf("1", "5", "2", "3"))
         }
         confirmVerified(toolsRepository)
     }
