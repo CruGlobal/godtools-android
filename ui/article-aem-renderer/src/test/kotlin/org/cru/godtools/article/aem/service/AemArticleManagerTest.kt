@@ -1,5 +1,6 @@
 package org.cru.godtools.article.aem.service
 
+import android.database.sqlite.SQLiteException
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.Called
@@ -13,6 +14,8 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.cru.godtools.article.aem.api.AemApi
+import org.cru.godtools.article.aem.db.AemImportRepository
+import org.cru.godtools.article.aem.db.ArticleDao
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.db.ResourceDao
 import org.cru.godtools.article.aem.model.Resource
@@ -109,6 +112,28 @@ class AemArticleManagerTest {
         coVerify(inverse = true) { articleManager.syncAemImportsFromManifest(any(), any()) }
     }
     // endregion Translations
+
+    // region downloadArticleForDisplay()
+    @Test
+    fun `downloadArticleForDisplay() - deeplink - catches unexpected exceptions`() = testScope.runTest {
+        val uri = Uri.parse("https://example.com/article")
+        val repository = mockk<AemImportRepository> { coEvery { accessAemImport(uri) } throws SQLiteException() }
+        every { aemDb.aemImportRepository() } returns repository
+
+        articleManager.downloadArticleForDisplay(uri, isDeeplink = true)
+        coVerify { repository.accessAemImport(uri) }
+    }
+
+    @Test
+    fun `downloadArticleForDisplay() - not deeplink - catches unexpected exceptions`() = testScope.runTest {
+        val uri = Uri.parse("https://example.com/article")
+        val articleDao = mockk<ArticleDao> { coEvery { find(uri) } throws SQLiteException() }
+        every { aemDb.articleDao() } returns articleDao
+
+        articleManager.downloadArticleForDisplay(uri, isDeeplink = false)
+        coVerify { articleDao.find(uri) }
+    }
+    // endregion downloadArticleForDisplay()
 
     // region Download Resource
     @Test
