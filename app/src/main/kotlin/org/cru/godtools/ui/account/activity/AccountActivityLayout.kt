@@ -12,8 +12,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -23,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.ccci.gto.android.common.androidx.compose.material3.isLight
 import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.ccci.gto.android.common.util.format
@@ -36,12 +33,9 @@ import org.cru.godtools.shared.user.activity.model.containerColor
 import org.cru.godtools.ui.account.ACCOUNT_PAGE_MARGIN_HORIZONTAL
 
 @Composable
-fun AccountActivityLayout(modifier: Modifier = Modifier) = Column(
+fun AccountActivityLayout(activity: UserActivity, modifier: Modifier = Modifier) = Column(
     modifier = modifier.padding(horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
 ) {
-    val viewModel = viewModel<AccountActivityViewModel>()
-    val activity by viewModel.userActivity.collectAsState()
-
     AccountActivity(activity, modifier = Modifier.padding(top = 32.dp))
     AccountActivityBadges(activity, modifier = Modifier.padding(vertical = 32.dp))
 }
