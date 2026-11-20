@@ -8,6 +8,10 @@ android {
     namespace = "org.cru.godtools.account"
 
     configureCompose(project)
+
+    defaultConfig {
+        consumerProguardFiles("src/main/proguard-credentials.pro")
+    }
 }
 
 dependencies {
@@ -29,9 +33,9 @@ dependencies {
     // endregion Facebook
 
     // region Google
-    implementation(libs.gtoSupport.play.auth)
-    implementation(libs.kotlin.coroutines.play.services)
-    implementation(libs.play.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
     // endregion Google
 
     ksp(libs.dagger.compiler)
