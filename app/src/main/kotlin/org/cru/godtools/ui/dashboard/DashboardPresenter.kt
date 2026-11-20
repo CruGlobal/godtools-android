@@ -27,11 +27,13 @@ import org.cru.godtools.base.ui.circuit.screen.dashboard.page.DashboardPage
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
+import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
 
 class DashboardPresenter @AssistedInject internal constructor(
     private val drawerMenuPresenter: DrawerMenuPresenter,
+    private val optInNotificationPresenter: OptInNotificationPresenter,
     private val syncService: GodToolsSyncService,
     @Assisted private val circuitContext: CircuitContext,
     @Assisted private val navigator: Navigator,
@@ -40,6 +42,7 @@ class DashboardPresenter @AssistedInject internal constructor(
     @ConsistentCopyVisibility
     data class UiState internal constructor(
         val drawerState: DrawerMenuScreen.State = DrawerMenuScreen.State(),
+        val optInNotificationState: OptInNotificationPresenter.UiState = OptInNotificationPresenter.UiState(),
         val isSyncing: Boolean = false,
         val initialPage: DashboardPage = HomeScreen,
         val snackbarState: SnackbarHostState = SnackbarHostState(),
@@ -58,6 +61,7 @@ class DashboardPresenter @AssistedInject internal constructor(
 
         return UiState(
             drawerState = drawerMenuPresenter.present(),
+            optInNotificationState = optInNotificationPresenter.present(navigator),
             isSyncing = syncRegistry.syncTracker.isSyncing.collectAsState().value,
             initialPage = screen.initialPage,
             snackbarState = remember { SnackbarHostState() },
