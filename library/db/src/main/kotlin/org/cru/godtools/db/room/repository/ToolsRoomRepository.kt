@@ -77,6 +77,9 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
     override suspend fun updateToolLocales(code: String, primary: Locale?, parallel: Locale?) =
         dao.updateToolLocales(code, primary, parallel)
 
+    override suspend fun initializeToolProgress(code: String, progress: Double, lastPageId: String?) =
+        dao.initializeToolProgress(code, progress, lastPageId)
+
     override suspend fun updateToolProgress(code: String, progress: Double?, lastPageId: String?) {
         dao.updateToolProgress(code, progress, lastPageId)
     }
