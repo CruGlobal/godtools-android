@@ -297,7 +297,18 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             manifestFileName,
             manifestParser.defaultConfig.withParseRelated(false)
         )
-        val manifest = (parserResult as? ParserResult.Data)?.manifest ?: return false
+        val manifest = when (parserResult) {
+            is ParserResult.Data -> parserResult.manifest
+
+            is ParserResult.Error.Corrupted,
+            is ParserResult.Error.NotFound -> {
+                // invalidate the broken manifest so it is replaced by a subsequent download
+                invalidateDownloadedFile(manifestFileName)
+                return false
+            }
+
+            else -> return false
+        }
 
         // download all files the manifest references
         val key = TranslationKey(translation)
@@ -379,6 +390,17 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         downloadedFilesRepository.insertOrIgnore(downloadedFile)
         return true
+    }
+
+    @GuardedBy("filesystemMutex")
+    private suspend fun invalidateDownloadedFile(fileName: String) {
+        filesMutex.withLock(fileName) {
+            val downloadedFile = downloadedFilesRepository.findDownloadedFile(fileName) ?: return
+            withContext(ioDispatcher) {
+                downloadedFilesRepository.delete(downloadedFile)
+                downloadedFile.getFile(fs).delete()
+            }
+        }
     }
 
     private suspend fun downloadTranslationZip(translation: Translation) = try {
